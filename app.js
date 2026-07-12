@@ -69,7 +69,7 @@ window.addEventListener("DOMContentLoaded", () => {
     // Mapeamos cada entidad del HTML con su rotación compensatoria en grados (X Y Z)
     // El orden de los índices (0 al 5) debe coincidir con tu lista en el compilador de MindAR
 
-    // --- 6. LÓGICA DE TRACKING DINÁMICO PARA LAS 6 CARAS ---
+// --- 6. LÓGICA DE TRACKING DINÁMICO PARA LAS 6 CARAS ---
     const caras = [
         { el: document.getElementById("cara-superior"),  rot: "0 0 0" },       
         { el: document.getElementById("cara-frontal"),   rot: "90 0 0" },      
@@ -81,18 +81,29 @@ window.addEventListener("DOMContentLoaded", () => {
 
     caras.forEach((cara) => {
         if (cara.el) {
-            // Cuando detecta la cara: movemos el visor y lo rotamos
             cara.el.addEventListener("targetFound", () => {
-                console.log("Cara detectada. Moviendo visor...");
+                console.log("Cara detectada. Moviendo e inicializando visor...");
+                
+                // 1. Teletransportamos el objeto a la nueva cara
                 cara.el.appendChild(visor);
+                
+                // 2. Aplicamos la rotación correspondiente a esta cara
                 visor.setAttribute("rotation", cara.rot);
-                visor.setAttribute("visible", true); // Aseguramos que sea visible
+                
+                // 3. ¡EL TRUCO! Forzamos a A-Frame a recalcular la posición en el espacio
+                if (visor.components && visor.components.position) {
+                    visor.components.position.update();
+                    visor.components.rotation.update();
+                }
+
+                // 4. Aseguramos la visibilidad (a veces se desactiva al mudar el nodo)
+                visor.setAttribute("visible", true);
             });
 
-            // NUEVO: Cuando pierde la cara, ayudamos al sistema ocultándolo un instante
-            // Esto fuerza a MindAR a buscar activamente otras caras en el espacio
             cara.el.addEventListener("targetLost", () => {
-                console.log("Cara perdida. Buscando siguiente cara...");
+                // Opcional: Si notas que el objeto parpadea mucho al girar, 
+                // puedes dejar este evento vacío para que no oculte el objeto 
+                // hasta que encuentre la siguiente cara.
             });
         }
     });
