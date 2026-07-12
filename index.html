@@ -1,64 +1,56 @@
 <!DOCTYPE html>
 <html lang="es">
-
 <head>
-<meta charset="UTF-8">
-<title>MergeCube AR</title>
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<link rel="stylesheet" href="style.css">
-<script src="https://aframe.io/releases/1.4.2/aframe.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/mind-ar@1.2.5/dist/mindar-image-aframe.prod.js"></script>
-<script src="app.js"></script>
+    <meta charset="UTF-8">
+    <title>MergeCube AR Pro</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    
+    <link rel="stylesheet" href="style.css">
+    
+    <script src="https://aframe.io/releases/1.4.2/aframe.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/mind-ar@1.2.5/dist/mindar-image-aframe.prod.js"></script>
+    <script src="app.js"></script>
 </head>
-
 <body>
 
-<div id="panel">
-    <label for="archivo" class="custom-file-upload">
-        📁 Seleccionar .glb
-    </label>
-    <input type="file" id="archivo" accept=".glb">
-    
-    <button id="btn-mas" class="btn-control">＋ Rev. 1.0</button>
-    <button id="btn-menos" class="btn-control">－ Reducir</button>
-</div>
+    <div id="panel">
+        <label for="archivo" class="custom-file-upload">
+            📁 Seleccionar .glb
+        </label>
+        <input type="file" id="archivo" accept=".glb">
+        
+        <button id="btn-mas" class="btn-control">＋ Ampliar</button>
+        <button id="btn-menos" class="btn-control">－ Reducir</button>
+    </div>
 
-<a-scene mindar-image="imageTargetSrc: mergecube.mind; maxTrack: 6; filterMinCF: 0.001; filterBeta: 0.1;" 
-         embedded vr-mode-ui="enabled:false" 
-         device-orientation-permission-ui="enabled:false" 
-         color-space="sRGB" 
-         renderer="colorManagement:true; physicallyCorrectLights:true">
+    <a-scene mindar-image="imageTargetSrc: mergecube.mind; maxTrack: 6; filterMinCF: 0.001; filterBeta: 0.1;" 
+             embedded vr-mode-ui="enabled:false" 
+             device-orientation-permission-ui="enabled:false" 
+             color-space="sRGB" 
+             renderer="colorManagement:true; physicallyCorrectLights:true">
 
-    <a-camera position="0 0 0" look-controls="enabled:false"></a-camera>
+        <a-camera position="0 0 0" look-controls="enabled:false"></a-camera>
 
-    <a-entity id="cara-superior" mindar-image-target="targetIndex: 0"></a-entity>
-    <a-entity id="cara-frontal" mindar-image-target="targetIndex: 1"></a-entity>
-    <a-entity id="cara-derecha" mindar-image-target="targetIndex: 2"></a-entity>
-    <a-entity id="cara-izquierda" mindar-image-target="targetIndex: 3"></a-entity>
-    <a-entity id="cara-trasera" mindar-image-target="targetIndex: 4"></a-entity>
-    <a-entity id="cara-inferior" mindar-image-target="targetIndex: 5"></a-entity>
+        <a-entity id="cara-superior" mindar-image-target="targetIndex: 0"></a-entity>
+        <a-entity id="cara-frontal" mindar-image-target="targetIndex: 1"></a-entity>
+        <a-entity id="cara-derecha" mindar-image-target="targetIndex: 2"></a-entity>
+        <a-entity id="cara-izquierda" mindar-image-target="targetIndex: 3"></a-entity>
+        <a-entity id="cara-trasera" mindar-image-target="targetIndex: 4"></a-entity>
+        <a-entity id="cara-inferior" mindar-image-target="targetIndex: 5"></a-entity>
 
-    <a-entity id="contenedor-objeto" position="0 0 0" rotation="0 0 0" visible="false">
         <a-entity
             id="visor"
             gltf-model=""
             position="0 0 0" 
             rotation="0 0 0"
-            scale="0.01 0.01 0.01">
+            scale="0.01 0.01 0.01"
+            visible="false">
         </a-entity>
-    </a-entity>
-
-    
-    <a-light type="ambient" intensity="1"></a-light>
-    
-    <a-light
-        type="directional"
-        intensity="1"
-        position="0 2 1">
-    </a-light>
-    
-</a-scene>
+            
+        <a-light type="ambient" intensity="1"></a-light>
+        <a-light type="directional" intensity="1.2" position="0 3 2"></a-light>
+        
+    </a-scene>
 
 </body>
-
 </html>
