@@ -68,27 +68,34 @@ window.addEventListener("DOMContentLoaded", () => {
     // --- 6. LÓGICA DE TRACKING DINÁMICO PARA LAS 6 CARAS ---
     // Mapeamos cada entidad del HTML con su rotación compensatoria en grados (X Y Z)
     // El orden de los índices (0 al 5) debe coincidir con tu lista en el compilador de MindAR
+
+    // --- 6. LÓGICA DE TRACKING DINÁMICO PARA LAS 6 CARAS ---
     const caras = [
-        { el: document.getElementById("cara-superior"),  rot: "0 0 0" },       // Cara 0: Arriba (Normal)
-        { el: document.getElementById("cara-frontal"),   rot: "90 0 0" },      // Cara 1: Frente (Inclinado hacia adelante)
-        { el: document.getElementById("cara-derecha"),   rot: "0 0 -90" },     // Cara 2: Derecha
-        { el: document.getElementById("cara-izquierda"), rot: "0 0 90" },      // Cara 3: Izquierda
-        { el: document.getElementById("cara-trasera"),   rot: "-90 0 180" },   // Cara 4: Atrás (Invertido y girado)
-        { el: document.getElementById("cara-inferior"),  rot: "180 0 0" }      // Cara 5: Abajo (Completamente boca abajo)
+        { el: document.getElementById("cara-superior"),  rot: "0 0 0" },       
+        { el: document.getElementById("cara-frontal"),   rot: "90 0 0" },      
+        { el: document.getElementById("cara-derecha"),   rot: "0 0 -90" },     
+        { el: document.getElementById("cara-izquierda"), rot: "0 0 90" },      
+        { el: document.getElementById("cara-trasera"),   rot: "-90 0 180" },   
+        { el: document.getElementById("cara-inferior"),  rot: "180 0 0" }      
     ];
 
-    // Recorremos las 6 caras y les añadimos el "oyente" de MindAR de forma automática
     caras.forEach((cara) => {
         if (cara.el) {
+            // Cuando detecta la cara: movemos el visor y lo rotamos
             cara.el.addEventListener("targetFound", () => {
-                console.log(`Cara detectada por la cámara. Moviendo visor a la posición corregida.`);
-                
-                // Teletransportamos el visor dentro de la cara que se está visualizando en este instante
+                console.log("Cara detectada. Moviendo visor...");
                 cara.el.appendChild(visor);
-                
-                // Aplicamos de inmediato la rotación matemática para que el objeto siga recto hacia arriba
                 visor.setAttribute("rotation", cara.rot);
+                visor.setAttribute("visible", true); // Aseguramos que sea visible
+            });
+
+            // NUEVO: Cuando pierde la cara, ayudamos al sistema ocultándolo un instante
+            // Esto fuerza a MindAR a buscar activamente otras caras en el espacio
+            cara.el.addEventListener("targetLost", () => {
+                console.log("Cara perdida. Buscando siguiente cara...");
             });
         }
     });
+
+    
 });
