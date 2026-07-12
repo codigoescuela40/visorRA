@@ -1,0 +1,79 @@
+/* Estilos Generales del Visor AR */
+html, body {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    background-color: #000000;
+}
+
+/* Interfaz flotante (Panel inferior centrado en forma de píldora) */
+#panel {
+    position: fixed;
+    bottom: 24px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 999;
+    
+    /* Efecto Cristal Translúcido moderno */
+    background: rgba(255, 255, 255, 0.75);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.4);
+    
+    padding: 10px 20px;
+    border-radius: 40px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+    
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    white-space: nowrap;
+}
+
+/* Estilo para camuflar el input file nativo */
+.custom-file-upload {
+    display: inline-block;
+    padding: 8px 16px;
+    cursor: pointer;
+    background: rgba(0, 0, 0, 0.06);
+    border-radius: 20px;
+    font-size: 13px;
+    font-weight: 500;
+    color: #222;
+    border: 1px solid rgba(0, 0, 0, 0.05);
+    transition: background 0.2s;
+}
+
+.custom-file-upload:hover {
+    background: rgba(0, 0, 0, 0.12);
+}
+
+/* Escondemos el input feo original */
+#archivo {
+    display: none;
+}
+
+/* Botones de Acción (Ampliar / Reducir) */
+.btn-control {
+    background: #1a73e8;
+    color: white;
+    border: none;
+    padding: 9px 18px;
+    border-radius: 20px;
+    font-size: 13px;
+    font-weight: bold;
+    cursor: pointer;
+    box-shadow: 0 2px 6px rgba(26, 115, 232, 0.25);
+    transition: background 0.2s, transform 0.1s;
+}
+
+.btn-control:hover {
+    background: #1557b0;
+}
+
+.btn-control:active {
+    transform: scale(0.95);
+}
