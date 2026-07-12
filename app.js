@@ -8,7 +8,7 @@ window.addEventListener("DOMContentLoaded", () => {
     const btnMas = document.getElementById("btn-mas");
     const btnMenos = document.getElementById("btn-menos");
 
-    let escalaActual = 0.03; 
+    let escalaActual = 0.01; 
     const pasoEscala = 0.005; 
     let urlActual = null;
     let modeloCargado = false; // Nos ayuda a saber si ya hay un modelo listo
