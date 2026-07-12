@@ -1,16 +1,18 @@
 window.addEventListener("DOMContentLoaded", () => {
 
     console.log("DOM cargado");
-
+    
+    // --- 1. SELECCIÓN DE ELEMENTOS DEL DOM ---
     const input = document.getElementById("archivo");
     const visor = document.getElementById("visor");
     const btnMas = document.getElementById("btn-mas");
     const btnMenos = document.getElementById("btn-menos");
     
-    // Factor de escala inicial (coincide con tu HTML: 0.01)
+    // --- 2. CONFIGURACIÓN DE ESCALA ---
     let escalaActual = 0.01; 
-    const pasoEscala = 0.01; // Cuánto aumenta/decrece cada vez
-    
+    const pasoEscala = 0.005; 
+
+    // --- 3. LÓGICA DE LOS BOTONES DE ESCALADO ---
     btnMas.addEventListener("click", () => {
         escalaActual += pasoEscala;
         visor.setAttribute("scale", `${escalaActual} ${escalaActual} ${escalaActual}`);
@@ -23,6 +25,7 @@ window.addEventListener("DOMContentLoaded", () => {
         }
     });
     
+    // --- 4. EVENTOS DE DIAGNÓSTICO DEL MODELO 3D ---
     visor.addEventListener("model-loaded", () => {
         console.log("MODELO CARGADO");
     });
@@ -32,9 +35,8 @@ window.addEventListener("DOMContentLoaded", () => {
         console.log(e.detail);
     });
 
-    console.log("input:", input);
-    console.log("visor:", visor);
 
+    // --- 5. LÓGICA DE CARGA DEL ARCHIVO LOCAL (.GLB) ---
     let urlActual = null;
 
     input.addEventListener("change", function () {
@@ -63,4 +65,30 @@ window.addEventListener("DOMContentLoaded", () => {
 
     });
 
+    // --- 6. LÓGICA DE TRACKING DINÁMICO PARA LAS 6 CARAS ---
+    // Mapeamos cada entidad del HTML con su rotación compensatoria en grados (X Y Z)
+    // El orden de los índices (0 al 5) debe coincidir con tu lista en el compilador de MindAR
+    const caras = [
+        { el: document.getElementById("cara-superior"),  rot: "0 0 0" },       // Cara 0: Arriba (Normal)
+        { el: document.getElementById("cara-frontal"),   rot: "90 0 0" },      // Cara 1: Frente (Inclinado hacia adelante)
+        { el: document.getElementById("cara-derecha"),   rot: "0 0 -90" },     // Cara 2: Derecha
+        { el: document.getElementById("cara-izquierda"), rot: "0 0 90" },      // Cara 3: Izquierda
+        { el: document.getElementById("cara-trasera"),   rot: "-90 0 180" },   // Cara 4: Atrás (Invertido y girado)
+        { el: document.getElementById("cara-inferior"),  rot: "180 0 0" }      // Cara 5: Abajo (Completamente boca abajo)
+    ];
+
+    // Recorremos las 6 caras y les añadimos el "oyente" de MindAR de forma automática
+    caras.forEach((cara) => {
+        if (cara.el) {
+            cara.el.addEventListener("targetFound", () => {
+                console.log(`Cara detectada por la cámara. Moviendo visor a la posición corregida.`);
+                
+                // Teletransportamos el visor dentro de la cara que se está visualizando en este instante
+                cara.el.appendChild(visor);
+                
+                // Aplicamos de inmediato la rotación matemática para que el objeto siga recto hacia arriba
+                visor.setAttribute("rotation", cara.rot);
+            });
+        }
+    });
 });
