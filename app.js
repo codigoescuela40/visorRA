@@ -4,24 +4,7 @@ window.addEventListener("DOMContentLoaded", () => {
 
     const input = document.getElementById("archivo");
     const visor = document.getElementById("visor");
-    const btnMas = document.getElementById("btn-mas");
-    const btnMenos = document.getElementById("btn-menos");
-    
-    // Factor de escala inicial (coincide con tu HTML: 0.01)
-    let escalaActual = 0.01; 
-    const pasoEscala = 0.002; // Cuánto aumenta/decrece cada vez
-    
-    btnMas.addEventListener("click", () => {
-        escalaActual += pasoEscala;
-        visor.setAttribute("scale", `${escalaActual} ${escalaActual} ${escalaActual}`);
-    });
-    
-    btnMenos.addEventListener("click", () => {
-        if (escalaActual > pasoEscala) { // Evita escalas negativas
-            escalaActual -= pasoEscala;
-            visor.setAttribute("scale", `${escalaActual} ${escalaActual} ${escalaActual}`);
-        }
-    });
+  
     visor.addEventListener("model-loaded", () => {
         console.log("MODELO CARGADO");
     });
