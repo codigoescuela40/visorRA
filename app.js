@@ -1,3 +1,22 @@
+const btnMas = document.getElementById("btn-mas");
+const btnMenos = document.getElementById("btn-menos");
+
+// Factor de escala inicial (coincide con tu HTML: 0.01)
+let escalaActual = 0.01; 
+const pasoEscala = 0.002; // Cuánto aumenta/decrece cada vez
+
+btnMas.addEventListener("click", () => {
+    escalaActual += pasoEscala;
+    visor.setAttribute("scale", `${escalaActual} ${escalaActual} ${escalaActual}`);
+});
+
+btnMenos.addEventListener("click", () => {
+    if (escalaActual > pasoEscala) { // Evita escalas negativas
+        escalaActual -= pasoEscala;
+        visor.setAttribute("scale", `${escalaActual} ${escalaActual} ${escalaActual}`);
+    }
+});
+
 window.addEventListener("DOMContentLoaded", () => {
 
     console.log("DOM cargado");
