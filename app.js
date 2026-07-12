@@ -9,7 +9,7 @@ window.addEventListener("DOMContentLoaded", () => {
     
     // Factor de escala inicial (coincide con tu HTML: 0.01)
     let escalaActual = 0.01; 
-    const pasoEscala = 0.02; // Cuánto aumenta/decrece cada vez
+    const pasoEscala = 0.01; // Cuánto aumenta/decrece cada vez
     
     btnMas.addEventListener("click", () => {
         escalaActual += pasoEscala;
