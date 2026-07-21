@@ -6,13 +6,18 @@ window.addEventListener("DOMContentLoaded", () => {
     const btnMas = document.getElementById("btn-mas");
     const btnMenos = document.getElementById("btn-menos");
     const modeloCargado = document.getElementById("modelo-cargado");    
+    const zoomInfo = document.getElementById("zoom-info");
     
     // En lugar de un solo visor, seleccionamos los 6 visores del cubo
     const visores = document.querySelectorAll(".visor-cubo");
     
     let escalaActual = 0.01;
     const FACTOR_ESCALA = 1.2; 
-
+    function actualizarZoom() {
+        const zoom = escalaActual / 0.01;
+        zoomInfo.textContent = `Zoom x${zoom.toFixed(2)}`;
+    }
+    
     let urlActual = null;
 
     // --- LÓGICA DE CARGA: SE INYECTA A LOS 6 VISORES AL MISMO TIEMPO ---
@@ -20,7 +25,11 @@ window.addEventListener("DOMContentLoaded", () => {
         console.log("Cambio de archivo detectado");
         const archivo = this.files[0];
         if (!archivo) return;
-
+        
+        // Reiniciar zoom para cada nuevo modelo
+        escalaActual = 0.01;
+        actualizarZoom();
+        
         modeloCargado.textContent = archivo.name;
         
         if (urlActual) {
@@ -46,7 +55,7 @@ window.addEventListener("DOMContentLoaded", () => {
     // --- LÓGICA DE BOTONES: ESCALAN LOS 6 VISORES EN PARALELO ---
     btnMas.addEventListener("click", () => {
         escalaActual *= FACTOR_ESCALA;
-    
+        actualizarZoom();    
         visores.forEach((visor) => {
             visor.setAttribute(
                 "scale",
@@ -59,7 +68,7 @@ window.addEventListener("DOMContentLoaded", () => {
     
     btnMenos.addEventListener("click", () => {
         escalaActual /= FACTOR_ESCALA;
-    
+        actualizarZoom();
         visores.forEach((visor) => {
             visor.setAttribute(
                 "scale",
@@ -69,6 +78,8 @@ window.addEventListener("DOMContentLoaded", () => {
     
         console.log("Escala:", escalaActual);
     });
+
+    actualizarZoom();
 });
 
 
