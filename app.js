@@ -53,7 +53,16 @@ visor.addEventListener("model-loaded", (e) => {
 
         if (!obj.isMesh) return;
 
-        console.log(obj.geometry.attributes);
+        // Eliminar los colores por vértice
+        delete obj.geometry.attributes.color;
+
+        // Desactivar vertex colors
+        obj.material.vertexColors = false;
+
+        // Poner un color visible
+        obj.material.color.set("#ff0000");
+
+        obj.material.needsUpdate = true;
 
     });
 
