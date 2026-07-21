@@ -50,19 +50,15 @@ window.addEventListener("DOMContentLoaded", () => {
 visor.addEventListener("model-loaded", (e) => {
 
     e.detail.model.traverse((obj) => {
-console.log(obj.material.color);
+
         if (!obj.isMesh) return;
 
-        // Eliminar los colores por vértice
-        delete obj.geometry.attributes.color;
+        console.log("Mesh:", obj.name);
+        console.log("Material:", obj.material);
 
-        // Desactivar vertex colors
-        obj.material.vertexColors = false;
-
-        // Poner un color visible
-        obj.material.color.set("#ff0000");
-
-        obj.material.needsUpdate = true;
+        if (obj.material) {
+            console.log("Color:", obj.material.color);
+        }
 
     });
 
