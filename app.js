@@ -48,12 +48,25 @@ window.addEventListener("DOMContentLoaded", () => {
             // Añadimos un escuchador individual por si queremos diagnosticar alguno
 
             visor.addEventListener("model-loaded", (e) => {
+            
                 e.detail.model.traverse((obj) => {
-
-                if (!obj.isMesh) return;
-                obj.geometry.computeVertexNormals();
+            
+                    if (!obj.isMesh || !obj.material) return;
+            
+                    const materiales = Array.isArray(obj.material)
+                        ? obj.material
+                        : [obj.material];
+            
+                    materiales.forEach((mat) => {
+                        mat.vertexColors = false;
+                        mat.color.set("#ff0000");
+                        mat.needsUpdate = true;
+                    });
+            
                 });
-                console.log("Modelo cargado");
+            
+                console.log("Vertex colors desactivados");
+            
             });
 
             
