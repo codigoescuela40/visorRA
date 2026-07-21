@@ -48,6 +48,11 @@ window.addEventListener("DOMContentLoaded", () => {
             // Añadimos un escuchador individual por si queremos diagnosticar alguno
 
             visor.addEventListener("model-loaded", (e) => {
+                e.detail.model.traverse((obj) => {
+
+                if (!obj.isMesh) return;
+                obj.geometry.computeVertexNormals();
+                });
                 console.log("Modelo cargado");
             });
 
