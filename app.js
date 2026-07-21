@@ -9,8 +9,9 @@ window.addEventListener("DOMContentLoaded", () => {
     // En lugar de un solo visor, seleccionamos los 6 visores del cubo
     const visores = document.querySelectorAll(".visor-cubo");
     
-    let escalaActual = 0.01; 
-    const pasoEscala = 0.005; 
+    let escalaActual = 0.01;
+    const FACTOR_ESCALA = 1.2; 
+
     let urlActual = null;
 
     // --- LÓGICA DE CARGA: SE INYECTA A LOS 6 VISORES AL MISMO TIEMPO ---
@@ -41,20 +42,30 @@ window.addEventListener("DOMContentLoaded", () => {
 
     // --- LÓGICA DE BOTONES: ESCALAN LOS 6 VISORES EN PARALELO ---
     btnMas.addEventListener("click", () => {
-        escalaActual += pasoEscala;
+        escalaActual *= FACTOR_ESCALA;
+    
         visores.forEach((visor) => {
-            visor.setAttribute("scale", `${escalaActual} ${escalaActual} ${escalaActual}`);
+            visor.setAttribute(
+                "scale",
+                `${escalaActual} ${escalaActual} ${escalaActual}`
+            );
         });
-        console.log("Escala aumentada en todas las caras a:", escalaActual);
+    
+        console.log("Escala:", escalaActual);
     });
     
     btnMenos.addEventListener("click", () => {
-        if (escalaActual > pasoEscala) {
-            escalaActual -= pasoEscala;
-            visores.forEach((visor) => {
-                visor.setAttribute("scale", `${escalaActual} ${escalaActual} ${escalaActual}`);
-            });
-            console.log("Escala reducida en todas las caras a:", escalaActual);
-        }
+        escalaActual /= FACTOR_ESCALA;
+    
+        visores.forEach((visor) => {
+            visor.setAttribute(
+                "scale",
+                `${escalaActual} ${escalaActual} ${escalaActual}`
+            );
+        });
+    
+        console.log("Escala:", escalaActual);
     });
 });
+
+
