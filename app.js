@@ -46,9 +46,26 @@ window.addEventListener("DOMContentLoaded", () => {
             visor.setAttribute("visible", true);
             
             // Añadimos un escuchador individual por si queremos diagnosticar alguno
-            visor.addEventListener("model-loaded", () => {
-                console.log("Espejo de cara inicializado con éxito");
+
+            visor.addEventListener("model-loaded", (e) => {
+            
+                e.detail.model.traverse((obj) => {
+            
+                    if (!obj.isMesh) return;
+            
+                    obj.material = new THREE.MeshStandardMaterial({
+                        color: 0xff0000,
+                        metalness: 0,
+                        roughness: 1
+                    });
+            
+                });
+            
+                console.log("Material sustituido");
+            
             });
+
+            
         });
     });
 
