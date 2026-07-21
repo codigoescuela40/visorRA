@@ -47,18 +47,17 @@ window.addEventListener("DOMContentLoaded", () => {
             
             // Añadimos un escuchador individual por si queremos diagnosticar alguno
 
-            visor.addEventListener("model-loaded", (e) => {
-            
-                e.detail.model.traverse((obj) => {
-            
-                    if (!obj.isMesh) return;
-            
-                    console.log("Mesh:", obj.name);
-                    console.log("Material:", obj.material);
-            
-                });
-            
-            });
+visor.addEventListener("model-loaded", (e) => {
+
+    e.detail.model.traverse((obj) => {
+
+        if (!obj.isMesh) return;
+
+        console.log(obj.geometry.attributes);
+
+    });
+
+});
 
             
         });
