@@ -50,7 +50,7 @@ window.addEventListener("DOMContentLoaded", () => {
 visor.addEventListener("model-loaded", (e) => {
 
     e.detail.model.traverse((obj) => {
-
+console.log(obj.material.color);
         if (!obj.isMesh) return;
 
         // Eliminar los colores por vértice
