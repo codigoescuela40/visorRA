@@ -77,3 +77,11 @@ html, body {
 .btn-control:active {
     transform: scale(0.95);
 }
+
+#modelo-cargado{
+    margin-left:12px;
+    color:white;
+    font-size:14px;
+    font-style:italic;
+}
+
