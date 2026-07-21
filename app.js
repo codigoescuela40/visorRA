@@ -53,12 +53,14 @@ visor.addEventListener("model-loaded", (e) => {
 
         if (!obj.isMesh) return;
 
-        console.log("Mesh:", obj.name);
-        console.log("Material:", obj.material);
-
-        if (obj.material) {
-            console.log("Color:", obj.material.color);
+        if (obj.geometry.hasAttribute("color")) {
+            obj.geometry.deleteAttribute("color");
         }
+
+        const mat = obj.material;
+
+        mat.vertexColors = false;
+        mat.needsUpdate = true;
 
     });
 
