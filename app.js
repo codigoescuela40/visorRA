@@ -5,6 +5,7 @@ window.addEventListener("DOMContentLoaded", () => {
     const input = document.getElementById("archivo");
     const btnMas = document.getElementById("btn-mas");
     const btnMenos = document.getElementById("btn-menos");
+    const modeloCargado = document.getElementById("modelo-cargado");    
     
     // En lugar de un solo visor, seleccionamos los 6 visores del cubo
     const visores = document.querySelectorAll(".visor-cubo");
@@ -20,6 +21,8 @@ window.addEventListener("DOMContentLoaded", () => {
         const archivo = this.files[0];
         if (!archivo) return;
 
+        modeloCargado.textContent = archivo.name;
+        
         if (urlActual) {
             URL.revokeObjectURL(urlActual);
         }
