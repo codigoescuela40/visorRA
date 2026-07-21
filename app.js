@@ -47,24 +47,9 @@ window.addEventListener("DOMContentLoaded", () => {
             
             // Añadimos un escuchador individual por si queremos diagnosticar alguno
 
-visor.addEventListener("model-loaded", (e) => {
-
-    e.detail.model.traverse((obj) => {
-
-        if (!obj.isMesh) return;
-
-        if (obj.geometry.hasAttribute("color")) {
-            obj.geometry.deleteAttribute("color");
-        }
-
-        const mat = obj.material;
-
-        mat.vertexColors = false;
-        mat.needsUpdate = true;
-
-    });
-
-});
+        visor.addEventListener("model-loaded", () => {
+            console.log("Modelo cargado");
+        });
 
             
         });
