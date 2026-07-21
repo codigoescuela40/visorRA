@@ -46,33 +46,7 @@ window.addEventListener("DOMContentLoaded", () => {
             visor.setAttribute("visible", true);
             
             // Añadimos un escuchador individual por si queremos diagnosticar alguno
-            visor.addEventListener("model-loaded", (e) => {
-                
-                e.detail.model.traverse((obj) => {
-        
-                    if (!obj.isMesh) return;
-            
-                    const mats = Array.isArray(obj.material)
-                        ? obj.material
-                        : [obj.material];
-            
-                    mats.forEach((mat) => {
-            
-                        if (!mat) return;
-            
-                        if ("metalness" in mat) mat.metalness = 0;
-            
-                        if ("roughness" in mat) mat.roughness = 1;
-            
-                        if ("envMapIntensity" in mat) mat.envMapIntensity = 1;
-            
-                        mat.needsUpdate = true;
-                    });
-        
-                });        
-                
-                
-                
+            visor.addEventListener("model-loaded", () => {
                 console.log("Espejo de cara inicializado con éxito");
             });
         });
