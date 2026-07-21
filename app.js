@@ -15,7 +15,7 @@ window.addEventListener("DOMContentLoaded", () => {
     const FACTOR_ESCALA = 1.2; 
     function actualizarZoom() {
         const zoom = escalaActual / 0.01;
-        zoomInfo.textContent = `Zoom x${zoom.toFixed(3)}`;
+        zoomInfo.textContent = `Zoom x${zoom.toPrecision(3)}`;
     }
     
     let urlActual = null;
