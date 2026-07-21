@@ -51,21 +51,12 @@ window.addEventListener("DOMContentLoaded", () => {
             
                 e.detail.model.traverse((obj) => {
             
-                    if (!obj.isMesh || !obj.material) return;
+                    if (!obj.isMesh) return;
             
-                    const materiales = Array.isArray(obj.material)
-                        ? obj.material
-                        : [obj.material];
-            
-                    materiales.forEach((mat) => {
-                        mat.vertexColors = false;
-                        mat.color.set("#ff0000");
-                        mat.needsUpdate = true;
-                    });
+                    console.log("Mesh:", obj.name);
+                    console.log("Material:", obj.material);
             
                 });
-            
-                console.log("Vertex colors desactivados");
             
             });
 
