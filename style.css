@@ -84,4 +84,9 @@ html, body {
     font-size:14px;
     font-style:italic;
 }
-
+#zoom-info {
+    margin-left: 12px;
+    color: #b0b0b0;
+    font-size: 14px;
+    font-weight: 600;
+}
