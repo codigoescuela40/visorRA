@@ -69,32 +69,15 @@ window.addEventListener("DOMContentLoaded", () => {
 
     // --- LÓGICA DE BOTONES: ESCALAN LOS 6 VISORES EN PARALELO ---
     btnMas.addEventListener("click", () => {
-        escalaActual *= FACTOR_ESCALA;
-        actualizarZoom();    
-        visores.forEach((visor) => {
-            visor.setAttribute(
-                "scale",
-                `${escalaActual} ${escalaActual} ${escalaActual}`
-            );
-        });
-    
-        console.log("Escala:", escalaActual);
-    });
-    
-    btnMenos.addEventListener("click", () => {
-        escalaActual /= FACTOR_ESCALA;
+        zoomUsuario *= FACTOR_ESCALA;
+        aplicarEscala();
         actualizarZoom();
-        visores.forEach((visor) => {
-            visor.setAttribute(
-                "scale",
-                `${escalaActual} ${escalaActual} ${escalaActual}`
-            );
-        });
-    
-        console.log("Escala:", escalaActual);
     });
-
-    actualizarZoom();
-});
+        
+    btnMenos.addEventListener("click", () => {
+        zoomUsuario /= FACTOR_ESCALA;
+        aplicarEscala();
+        actualizarZoom();
+    });
 
 
