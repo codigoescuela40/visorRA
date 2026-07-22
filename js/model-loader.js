@@ -14,71 +14,43 @@ window.ModelLoader = {
 
 visor.addEventListener("model-loaded", (e) => {
 
-    console.log("==============");
-    console.log("MODEL LOADED");
-    console.log("==============");
-
-    console.log("e.detail.model:");
-    console.log(e.detail.model);
-
-    console.log("visor.object3D:");
-    console.log(visor.object3D);
-
-    console.log("getObject3D('mesh'):");
-    console.log(visor.getObject3D("mesh"));
-
     const modelo = e.detail.model;
 
-    console.log("Recorrido completo del modelo:");
+    let cajaGlobal = new THREE.Box3();
+    let primera = true;
 
     modelo.traverse((obj) => {
 
-        console.log("----------------");
-        console.log("Nombre:", obj.name);
-        console.log("Tipo:", obj.type);
-        console.log("isMesh:", obj.isMesh);
+        if (!obj.isMesh || !obj.geometry) return;
 
-        if (obj.isMesh) {
+        obj.geometry.computeBoundingBox();
 
-            console.log("Geometría:", obj.geometry);
+        const caja = obj.geometry.boundingBox.clone();
 
-            const pos = obj.geometry.getAttribute("position");
+        console.log("Mesh:", obj.name || "(sin nombre)");
+        console.log("BoundingBox local:", caja);
 
-            console.log("Atributo POSITION:", pos);
-
-            if (pos) {
-                console.log("Vertices:", pos.count);
-            }
-
-            console.log("BoundingBox:", obj.geometry.boundingBox);
-            console.log("BoundingSphere:", obj.geometry.boundingSphere);
-
-            obj.geometry.computeBoundingBox();
-            obj.geometry.computeBoundingSphere();
-
-            console.log("BoundingBox calculada:", obj.geometry.boundingBox);
-            console.log("BoundingSphere calculada:", obj.geometry.boundingSphere);
-
+        if (primera) {
+            cajaGlobal.copy(caja);
+            primera = false;
+        } else {
+            cajaGlobal.union(caja);
         }
 
     });
 
-    console.log("====== BOX3 ======");
-
-    const caja = new THREE.Box3();
-
-    caja.setFromObject(modelo);
-
-    console.log(caja);
-
-    console.log("min:", caja.min);
-    console.log("max:", caja.max);
+    console.log("===============");
+    console.log("CAJA GLOBAL");
+    console.log(cajaGlobal);
 
     const tamaño = new THREE.Vector3();
+    cajaGlobal.getSize(tamaño);
 
-    caja.getSize(tamaño);
+    console.log("Tamaño global:", tamaño);
 
-    console.log("Tamaño:", tamaño);
+    const mayor = Math.max(tamaño.x, tamaño.y, tamaño.z);
+
+    console.log("Lado mayor:", mayor);
 
 }, { once: true });
 
