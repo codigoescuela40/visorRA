@@ -79,5 +79,5 @@ window.addEventListener("DOMContentLoaded", () => {
         aplicarEscala();
         actualizarZoom();
     });
-
+});
 
