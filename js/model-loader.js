@@ -78,6 +78,70 @@ window.ModelLoader = {
 
         });
 
+    },
+
+    cargarSTL(url, visores, escalaInicial, onEscalaCalculada) {
+    
+        const loader = new THREE.STLLoader();
+    
+        loader.load(url, (geometry) => {
+    
+            console.log("STL cargado");
+    
+            geometry.computeBoundingBox();
+    
+            const caja = geometry.boundingBox;
+    
+            const tamaño = new THREE.Vector3();
+            caja.getSize(tamaño);
+    
+            const mayor = Math.max(
+                tamaño.x,
+                tamaño.y,
+                tamaño.z
+            );
+    
+            console.log("Lado mayor STL:", mayor);
+    
+            const TAMAÑO_OBJETIVO = 0.8;
+    
+            const escalaCalculada =
+                TAMAÑO_OBJETIVO / mayor;
+    
+            console.log("Escala STL:", escalaCalculada);
+    
+            const material = new THREE.MeshStandardMaterial({
+                color: 0xcccccc,
+                roughness: 0.6,
+                metalness: 0.1
+            });
+    
+            visores.forEach((visor) => {
+    
+                visor.removeObject3D("mesh");
+    
+                const mesh = new THREE.Mesh(
+                    geometry,
+                    material
+                );
+    
+                visor.setObject3D("mesh", mesh);
+    
+                visor.setAttribute(
+                    "scale",
+                    `${escalaCalculada} ${escalaCalculada} ${escalaCalculada}`
+                );
+    
+                visor.setAttribute("visible", true);
+    
+            });
+    
+            if (onEscalaCalculada) {
+                onEscalaCalculada(escalaCalculada);
+            }
+    
+        });
+    
     }
 
 };
