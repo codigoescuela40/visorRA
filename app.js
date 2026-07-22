@@ -25,6 +25,7 @@ window.addEventListener("DOMContentLoaded", () => {
         console.log("Cambio de archivo detectado");
         const archivo = this.files[0];
         if (!archivo) return;
+        const extension = archivo.name.toLowerCase().split(".").pop();
         
         // Reiniciar zoom para cada nuevo modelo
         escalaActual = 0.01;
@@ -40,12 +41,14 @@ window.addEventListener("DOMContentLoaded", () => {
         console.log("Nueva URL Blob generada:", urlActual);
 
         // Cargamos los visores
-        ModelLoader.cargarGLB(
-            urlActual,
-            visores,
-            escalaActual
-        );
-
+        if (extension === "glb") {
+            ModelLoader.cargarGLB(urlActual, visores, escalaActual);
+        } else if (extension === "stl") {
+            ModelLoader.cargarSTL(urlActual, visores, escalaActual);
+        } else {
+            alert("Formato no soportado");
+        }
+        
     });
 
     // --- LÓGICA DE BOTONES: ESCALAN LOS 6 VISORES EN PARALELO ---
