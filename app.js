@@ -60,7 +60,7 @@ window.addEventListener("DOMContentLoaded", () => {
                 }
             );
         } else if (extension === "stl") {
-            ModelLoader.cargarSTL(urlActual, visores, escalaBase);
+            alert("STL aún no implementado");
         } else {
             alert("Formato no soportado");
         }
