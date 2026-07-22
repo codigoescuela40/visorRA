@@ -42,7 +42,13 @@ window.ModelLoader = {
 
                 const tamaño = new THREE.Vector3();
                 cajaGlobal.getSize(tamaño);
-
+                const centroGLB = new THREE.Vector3();
+                cajaGlobal.getCenter(centroGLB);
+                
+                console.log("Caja GLB:", cajaGlobal);
+                console.log("Centro GLB:", centroGLB);
+                console.log("Tamaño GLB:", tamaño);
+                
                 const mayor = Math.max(
                     tamaño.x,
                     tamaño.y,
@@ -89,12 +95,18 @@ window.ModelLoader = {
             console.log("STL cargado");
     
             geometry.computeBoundingBox();
-    
+
             const caja = geometry.boundingBox;
     
             const tamaño = new THREE.Vector3();
             caja.getSize(tamaño);
-    
+            const centroSTL = new THREE.Vector3();
+            caja.getCenter(centroSTL);
+            
+            console.log("Caja STL:", caja);
+            console.log("Centro STL:", centroSTL);
+            console.log("Tamaño STL:", tamaño);
+            
             const mayor = Math.max(
                 tamaño.x,
                 tamaño.y,
@@ -124,7 +136,8 @@ window.ModelLoader = {
                     geometry,
                     material
                 );
-    
+                mesh.rotation.x = -Math.PI / 2;
+                
                 visor.setObject3D("mesh", mesh);
     
                 visor.setAttribute(
