@@ -1,5 +1,41 @@
 window.ModelLoader = {
-
+    procesarModelo(modelo, visores, onEscalaCalculada) {
+    
+        const cajaGlobal = new THREE.Box3().setFromObject(modelo);
+    
+        console.log("==========");
+        console.log("CAJA GLOBAL");
+        console.log(cajaGlobal);
+    
+        const tamaño = new THREE.Vector3();
+        cajaGlobal.getSize(tamaño);
+    
+        console.log("Tamaño:", tamaño);
+    
+        const centro = new THREE.Vector3();
+        cajaGlobal.getCenter(centro);
+    
+        console.log("Centro:", centro);
+    
+        const mayor = Math.max(
+            tamaño.x,
+            tamaño.y,
+            tamaño.z
+        );
+    
+        console.log("Lado mayor:", mayor);
+    
+        const TAMAÑO_OBJETIVO = 0.8;
+    
+        const escalaCalculada = TAMAÑO_OBJETIVO / mayor;
+    
+        console.log("Escala:", escalaCalculada);
+    
+        if (onEscalaCalculada) {
+            onEscalaCalculada(escalaCalculada);
+        }
+    
+    }
     cargarGLB(url, visores, escalaInicial, onEscalaCalculada) {
 
         visores.forEach((visor, indice) => {
@@ -19,61 +55,22 @@ window.ModelLoader = {
                 if (indice !== 0) return;
 
                 const modelo = e.detail.model;
-
-                let cajaGlobal = new THREE.Box3();
-                let primera = true;
-
-                modelo.traverse((obj) => {
-
-                    if (!obj.isMesh || !obj.geometry) return;
-
-                    obj.geometry.computeBoundingBox();
-
-                    const caja = obj.geometry.boundingBox.clone();
-
-                    if (primera) {
-                        cajaGlobal.copy(caja);
-                        primera = false;
-                    } else {
-                        cajaGlobal.union(caja);
+                
+                ModelLoader.procesarModelo(
+                    modelo,
+                    visores,
+                    (escalaCalculada) => {
+                        visores.forEach(v => {
+                            v.setAttribute(
+                                "scale",
+                                `${escalaCalculada} ${escalaCalculada} ${escalaCalculada}`
+                            );
+                        });
+                        if (onEscalaCalculada) {
+                            onEscalaCalculada(escalaCalculada);
+                        }
                     }
-
-                });
-
-                const tamaño = new THREE.Vector3();
-                cajaGlobal.getSize(tamaño);
-
-                const mayor = Math.max(
-                    tamaño.x,
-                    tamaño.y,
-                    tamaño.z
                 );
-
-                console.log("Lado mayor:", mayor);
-
-                // Queremos que el modelo ocupe unos 8 cm virtuales
-                const TAMAÑO_OBJETIVO = 0.8;
-
-                const escalaCalculada =
-                    TAMAÑO_OBJETIVO / mayor;
-
-                console.log("Escala calculada:", escalaCalculada);
-
-                // Aplicar la escala a los 6 visores
-                visores.forEach(v => {
-
-                    v.setAttribute(
-                        "scale",
-                        `${escalaCalculada} ${escalaCalculada} ${escalaCalculada}`
-                    );
-
-                });
-
-                // Avisar al app.js
-                if (onEscalaCalculada) {
-                    onEscalaCalculada(escalaCalculada);
-                }
-
             }, { once:true });
 
         });
