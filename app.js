@@ -42,7 +42,10 @@ window.addEventListener("DOMContentLoaded", () => {
 
         // Cargamos los visores
         if (extension === "glb") {
-            ModelLoader.cargarGLB(urlActual, visores, escalaActual);
+            ModelLoader.cargarGLB(urlActual, visores, escalaActual, (escala) => 
+                { escalaActual = escala;
+                 actualizarZoom();
+                });
         } else if (extension === "stl") {
             ModelLoader.cargarSTL(urlActual, visores, escalaActual);
         } else {
