@@ -27,8 +27,12 @@ visor.addEventListener("model-loaded", (e) => {
 
         const caja = obj.geometry.boundingBox.clone();
 
-        console.log("Mesh:", obj.name || "(sin nombre)");
-        console.log("BoundingBox local:", caja);
+        const tamaño = new THREE.Vector3();
+        caja.getSize(tamaño);
+        
+        console.log("---------------------");
+        console.log("Nombre:", obj.name);
+        console.log("Tamaño:", tamaño);
 
         if (primera) {
             cajaGlobal.copy(caja);
