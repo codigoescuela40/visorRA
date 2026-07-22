@@ -39,20 +39,13 @@ window.addEventListener("DOMContentLoaded", () => {
         urlActual = URL.createObjectURL(archivo);
         console.log("Nueva URL Blob generada:", urlActual);
 
-        // Recorremos los 6 visores e inyectamos el modelo de forma estable
-        visores.forEach((visor) => {
-            visor.setAttribute("gltf-model", urlActual);
-            visor.setAttribute("scale", `${escalaActual} ${escalaActual} ${escalaActual}`);
-            visor.setAttribute("visible", true);
-            
-            // Añadimos un escuchador individual por si queremos diagnosticar alguno
+        // Cargamos los visores
+        ModelLoader.cargarGLB(
+            urlActual,
+            visores,
+            escalaActual
+        );
 
-        visor.addEventListener("model-loaded", () => {
-            console.log("Modelo cargado");
-        });
-
-            
-        });
     });
 
     // --- LÓGICA DE BOTONES: ESCALAN LOS 6 VISORES EN PARALELO ---
