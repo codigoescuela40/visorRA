@@ -52,7 +52,7 @@ window.ModelLoader = {
                 console.log("Lado mayor:", mayor);
 
                 // Queremos que el modelo ocupe unos 8 cm virtuales
-                const TAMAÑO_OBJETIVO = 0.08;
+                const TAMAÑO_OBJETIVO = 0.8;
 
                 const escalaCalculada =
                     TAMAÑO_OBJETIVO / mayor;
