@@ -11,6 +11,17 @@ window.ModelLoader = {
         caja.getSize(tamaño);
 
         const centro = new THREE.Vector3();
+        cajaGlobal.getCenter(centro);
+        
+        console.log("=================================");
+        console.log("Centro:", centro);
+        console.log("Tamaño:", tamaño);
+        console.log("Caja:", cajaGlobal);
+        console.log("=================================");
+        console.log("Min:", cajaGlobal.min);
+        console.log("Max:", cajaGlobal.max);
+        
+        const centro = new THREE.Vector3();
         caja.getCenter(centro);
 
         console.log("========== MODELO ==========");
