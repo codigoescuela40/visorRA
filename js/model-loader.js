@@ -1,80 +1,75 @@
 window.ModelLoader = {
-    procesarModelo(modelo, visores, onEscalaCalculada) {
-    
-        const cajaGlobal = new THREE.Box3().setFromObject(modelo);
-    
-        console.log("==========");
-        console.log("CAJA GLOBAL");
-        console.log(cajaGlobal);
-    
+
+    // ==========================================================
+    // Calcula tamaño, centro y escala de cualquier Object3D
+    // ==========================================================
+    procesarModelo(modelo) {
+
+        const caja = new THREE.Box3().setFromObject(modelo);
+
         const tamaño = new THREE.Vector3();
-        cajaGlobal.getSize(tamaño);
-    
-        console.log("Tamaño:", tamaño);
-    
+        caja.getSize(tamaño);
+
         const centro = new THREE.Vector3();
-        cajaGlobal.getCenter(centro);
-    
+        caja.getCenter(centro);
+
+        console.log("========== MODELO ==========");
+        console.log("BoundingBox:", caja);
+        console.log("Tamaño:", tamaño);
         console.log("Centro:", centro);
-    
-        const mayor = Math.max(
+
+        const ladoMayor = Math.max(
             tamaño.x,
             tamaño.y,
             tamaño.z
         );
-    
-        console.log("Lado mayor:", mayor);
-    
+
+        console.log("Lado mayor:", ladoMayor);
+
+        // Queremos que el modelo mida aprox. 80 cm virtuales
         const TAMAÑO_OBJETIVO = 0.8;
-    
-        const escalaCalculada = TAMAÑO_OBJETIVO / mayor;
-    
-        console.log("Escala:", escalaCalculada);
-    
-        if (onEscalaCalculada) {
-            onEscalaCalculada(escalaCalculada);
-        }
-    
-    }
+
+        const escala = TAMAÑO_OBJETIVO / ladoMayor;
+
+        console.log("Escala calculada:", escala);
+
+        return {
+            caja,
+            tamaño,
+            centro,
+            escala
+        };
+
+    },
+
+    // ==========================================================
+    // CARGA GLB
+    // ==========================================================
     cargarGLB(url, visores, escalaInicial, onEscalaCalculada) {
-
         visores.forEach((visor, indice) => {
-
             visor.removeAttribute("gltf-model");
-
             visor.setAttribute("gltf-model", url);
             visor.setAttribute(
                 "scale",
                 `${escalaInicial} ${escalaInicial} ${escalaInicial}`
             );
             visor.setAttribute("visible", true);
-
             visor.addEventListener("model-loaded", (e) => {
-
-                // Sólo calculamos la escala una vez (primer visor)
                 if (indice !== 0) return;
-
-                const modelo = e.detail.model;
-                
-                ModelLoader.procesarModelo(
-                    modelo,
-                    visores,
-                    (escalaCalculada) => {
-                        visores.forEach(v => {
-                            v.setAttribute(
-                                "scale",
-                                `${escalaCalculada} ${escalaCalculada} ${escalaCalculada}`
-                            );
-                        });
-                        if (onEscalaCalculada) {
-                            onEscalaCalculada(escalaCalculada);
-                        }
-                    }
+                const resultado = ModelLoader.procesarModelo(
+                    e.detail.model
                 );
-            }, { once:true });
-
+                visores.forEach(v => {
+                    v.setAttribute(
+                        "scale",
+                        `${resultado.escala} ${resultado.escala} ${resultado.escala}`
+                    );
+                });
+                if (onEscalaCalculada) {
+                    onEscalaCalculada(resultado.escala);
+                }
+            }, { once: true });
         });
-
     }
 
 };
