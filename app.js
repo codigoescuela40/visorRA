@@ -39,7 +39,7 @@ window.addEventListener("DOMContentLoaded", () => {
         const extension = archivo.name.toLowerCase().split(".").pop();
         
         // Reiniciar zoom para cada nuevo modelo
-        escalaActual = 0.01;
+        zoomUsuario = 1;
         actualizarZoom();
         
         modeloCargado.textContent = archivo.name;
@@ -53,10 +53,12 @@ window.addEventListener("DOMContentLoaded", () => {
 
         // Cargamos los visores
         if (extension === "glb") {
-            ModelLoader.cargarGLB(urlActual, visores, escalaActual, (escala) => 
-                { escalaActual = escala;
-                 actualizarZoom();
-                });
+            ModelLoader.cargarGLB(urlActual, visores, 0.01, (escala) => {
+                    escalaBase = escala;
+                    aplicarEscala();
+                    actualizarZoom();
+                }
+            );
         } else if (extension === "stl") {
             ModelLoader.cargarSTL(urlActual, visores, escalaActual);
         } else {
