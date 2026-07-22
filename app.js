@@ -11,11 +11,22 @@ window.addEventListener("DOMContentLoaded", () => {
     // En lugar de un solo visor, seleccionamos los 6 visores del cubo
     const visores = document.querySelectorAll(".visor-cubo");
     
-    let escalaActual = 0.01;
-    const FACTOR_ESCALA = 1.2; 
+    let escalaBase = 0.01;
+    let zoomUsuario = 1;
+    const FACTOR_ESCALA = 1.2;
+    
+    function aplicarEscala() {
+        const escala = escalaBase * zoomUsuario;
+        visores.forEach((visor) => {
+            visor.setAttribute(
+                "scale",
+                `${escala} ${escala} ${escala}`
+            );
+        });
+    }
+    
     function actualizarZoom() {
-        const zoom = escalaActual / 0.01;
-        zoomInfo.textContent = `Zoom x${zoom.toPrecision(3)}`;
+        zoomInfo.textContent = `Zoom x${zoomUsuario.toPrecision(3)}`;
     }
     
     let urlActual = null;
