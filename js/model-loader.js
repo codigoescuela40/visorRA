@@ -4,55 +4,46 @@ window.ModelLoader = {
     // Calcula tamaño, centro y escala de cualquier Object3D
     // ==========================================================
     procesarModelo(modelo) {
-
+    
+        modelo.updateMatrixWorld(true);
+    
         const caja = new THREE.Box3().setFromObject(modelo);
-
+    
         const tamaño = new THREE.Vector3();
         caja.getSize(tamaño);
-
-        const centro = new THREE.Vector3();
-        cajaGlobal.getCenter(centro);
-        
-        console.log("=================================");
-        console.log("Centro:", centro);
-        console.log("Tamaño:", tamaño);
-        console.log("Caja:", cajaGlobal);
-        console.log("=================================");
-        console.log("Min:", cajaGlobal.min);
-        console.log("Max:", cajaGlobal.max);
-        
+    
         const centro = new THREE.Vector3();
         caja.getCenter(centro);
-
-        console.log("========== MODELO ==========");
+    
+        console.log("=================================");
         console.log("BoundingBox:", caja);
-        console.log("Tamaño:", tamaño);
+        console.log("Min:", caja.min);
+        console.log("Max:", caja.max);
         console.log("Centro:", centro);
-
+        console.log("Tamaño:", tamaño);
+    
         const ladoMayor = Math.max(
             tamaño.x,
             tamaño.y,
             tamaño.z
         );
-
+    
         console.log("Lado mayor:", ladoMayor);
-
-        // Queremos que el modelo mida aprox. 80 cm virtuales
+    
         const TAMAÑO_OBJETIVO = 0.8;
-
         const escala = TAMAÑO_OBJETIVO / ladoMayor;
-
+    
         console.log("Escala calculada:", escala);
-
+        console.log("=================================");
+    
         return {
             caja,
             tamaño,
             centro,
             escala
         };
-
+    
     },
-
     // ==========================================================
     // CARGA GLB
     // ==========================================================
