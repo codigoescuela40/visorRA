@@ -1,62 +1,80 @@
 window.ModelLoader = {
 
-    cargarGLB(url, visores, escala) {
+    cargarGLB(url, visores, escalaInicial, onEscalaCalculada) {
 
-        visores.forEach((visor) => {
+        visores.forEach((visor, indice) => {
 
-            // Limpiar cualquier modelo anterior
             visor.removeAttribute("gltf-model");
-            visor.removeObject3D("mesh");
 
             visor.setAttribute("gltf-model", url);
-            visor.setAttribute("scale", `${escala} ${escala} ${escala}`);
+            visor.setAttribute(
+                "scale",
+                `${escalaInicial} ${escalaInicial} ${escalaInicial}`
+            );
             visor.setAttribute("visible", true);
 
-visor.addEventListener("model-loaded", (e) => {
+            visor.addEventListener("model-loaded", (e) => {
 
-    const modelo = e.detail.model;
+                // Sólo calculamos la escala una vez (primer visor)
+                if (indice !== 0) return;
 
-    let cajaGlobal = new THREE.Box3();
-    let primera = true;
+                const modelo = e.detail.model;
 
-    modelo.traverse((obj) => {
+                let cajaGlobal = new THREE.Box3();
+                let primera = true;
 
-        if (!obj.isMesh || !obj.geometry) return;
+                modelo.traverse((obj) => {
 
-        obj.geometry.computeBoundingBox();
+                    if (!obj.isMesh || !obj.geometry) return;
 
-        const caja = obj.geometry.boundingBox.clone();
+                    obj.geometry.computeBoundingBox();
 
-        const tamaño = new THREE.Vector3();
-        caja.getSize(tamaño);
-        
-        console.log("---------------------");
-        console.log("Nombre:", obj.name);
-        console.log("Tamaño:", tamaño);
+                    const caja = obj.geometry.boundingBox.clone();
 
-        if (primera) {
-            cajaGlobal.copy(caja);
-            primera = false;
-        } else {
-            cajaGlobal.union(caja);
-        }
+                    if (primera) {
+                        cajaGlobal.copy(caja);
+                        primera = false;
+                    } else {
+                        cajaGlobal.union(caja);
+                    }
 
-    });
+                });
 
-    console.log("===============");
-    console.log("CAJA GLOBAL");
-    console.log(cajaGlobal);
+                const tamaño = new THREE.Vector3();
+                cajaGlobal.getSize(tamaño);
 
-    const tamaño = new THREE.Vector3();
-    cajaGlobal.getSize(tamaño);
+                const mayor = Math.max(
+                    tamaño.x,
+                    tamaño.y,
+                    tamaño.z
+                );
 
-    console.log("Tamaño global:", tamaño);
+                console.log("Lado mayor:", mayor);
 
-    const mayor = Math.max(tamaño.x, tamaño.y, tamaño.z);
+                // Queremos que el modelo ocupe unos 8 cm virtuales
+                const TAMAÑO_OBJETIVO = 0.08;
 
-    console.log("Lado mayor:", mayor);
+                const escalaCalculada =
+                    TAMAÑO_OBJETIVO / mayor;
 
-}, { once: true });
+                console.log("Escala calculada:", escalaCalculada);
+
+                // Aplicar la escala a los 6 visores
+                visores.forEach(v => {
+
+                    v.setAttribute(
+                        "scale",
+                        `${escalaCalculada} ${escalaCalculada} ${escalaCalculada}`
+                    );
+
+                });
+
+                // Avisar al app.js
+                if (onEscalaCalculada) {
+                    onEscalaCalculada(escalaCalculada);
+                }
+
+            }, { once:true });
 
         });
 
