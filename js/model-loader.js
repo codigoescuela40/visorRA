@@ -118,11 +118,9 @@ window.ModelLoader = {
                 escala: escalaCalculada
             });
 
-            const material = new THREE.MeshPhongMaterial({
-                color: 0xbdbdbd,
-                shininess: 25,
-                specular: 0x555555
-            });
+const material = new THREE.MeshBasicMaterial({
+    color: 0xff0000
+});
 
             visores.forEach((visor) => {
 
