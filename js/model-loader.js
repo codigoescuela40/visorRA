@@ -19,7 +19,18 @@ window.ModelLoader = {
                 if (indice !== 0) return;
 
                 const modelo = e.detail.model;
+const cajaThree = new THREE.Box3().setFromObject(modelo);
 
+const tamañoThree = new THREE.Vector3();
+cajaThree.getSize(tamañoThree);
+
+const centroThree = new THREE.Vector3();
+cajaThree.getCenter(centroThree);
+
+console.log("=== BOX3 OFICIAL ===");
+console.log("Centro:", centroThree);
+console.log("Tamaño:", tamañoThree);
+                
                 let cajaGlobal = new THREE.Box3();
                 let primera = true;
 
@@ -44,10 +55,6 @@ window.ModelLoader = {
                 cajaGlobal.getSize(tamaño);
                 const centroGLB = new THREE.Vector3();
                 cajaGlobal.getCenter(centroGLB);
-                
-                console.log("Caja GLB:", cajaGlobal);
-                console.log("Centro GLB:", centroGLB);
-                console.log("Tamaño GLB:", tamaño);
                 
                 const mayor = Math.max(
                     tamaño.x,
@@ -95,17 +102,15 @@ window.ModelLoader = {
             console.log("STL cargado");
     
             geometry.computeBoundingBox();
-
+            geometry.computeVertexNormals();
+            geometry.normalizeNormals();
+            
             const caja = geometry.boundingBox;
     
             const tamaño = new THREE.Vector3();
             caja.getSize(tamaño);
             const centroSTL = new THREE.Vector3();
             caja.getCenter(centroSTL);
-            
-            console.log("Caja STL:", caja);
-            console.log("Centro STL:", centroSTL);
-            console.log("Tamaño STL:", tamaño);
             
             const mayor = Math.max(
                 tamaño.x,
@@ -123,9 +128,10 @@ window.ModelLoader = {
             console.log("Escala STL:", escalaCalculada);
     
             const material = new THREE.MeshStandardMaterial({
-                color: 0xcccccc,
-                roughness: 0.6,
-                metalness: 0.1
+                color: 0xb8b8b8,
+                roughness: 0.35,
+                metalness: 0.0,
+                flatShading: false
             });
     
             visores.forEach((visor) => {
