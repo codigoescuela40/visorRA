@@ -55,6 +55,15 @@ console.log("Tamaño:", tamañoThree);
                 cajaGlobal.getSize(tamaño);
                 const centroGLB = new THREE.Vector3();
                 cajaGlobal.getCenter(centroGLB);
+
+modelo.position.set(
+    -centroGLB.x,
+    -centroGLB.y,
+    -centroGLB.z
+);
+
+console.log("Posición aplicada GLB:", modelo.position);
+
                 
                 const mayor = Math.max(
                     tamaño.x,
@@ -127,12 +136,7 @@ console.log("Tamaño:", tamañoThree);
     
             console.log("Escala STL:", escalaCalculada);
     
-            const material = new THREE.MeshStandardMaterial({
-                color: 0xb8b8b8,
-                roughness: 0.35,
-                metalness: 0.0,
-                flatShading: false
-            });
+const material = new THREE.MeshNormalMaterial();
     
             visores.forEach((visor) => {
     
