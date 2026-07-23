@@ -1,7 +1,5 @@
 window.addEventListener("DOMContentLoaded", () => {
 
-    console.log("DOM cargado en Local - Matriz de Espejos");
-    
     const input = document.getElementById("archivo");
     const btnMas = document.getElementById("btn-mas");
     const btnMenos = document.getElementById("btn-menos");
