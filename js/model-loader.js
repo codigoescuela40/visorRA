@@ -39,7 +39,8 @@ window.ModelLoader = {
 
           const centroGLB = new THREE.Vector3();
           cajaGlobal.getCenter(centroGLB);
-
+console.log("Posición visor:", visores[0].getAttribute("position"));
+console.log("Posición modelo:", modelo.position);
           console.log("Caja GLB:", cajaGlobal);
           console.log("Centro GLB:", centroGLB);
           console.log("Tamaño GLB:", tamaño);
@@ -108,8 +109,13 @@ window.ModelLoader = {
       const escalaCalculada = TAMAÑO_OBJETIVO / mayor;
 
       console.log("Escala STL:", escalaCalculada);
-
-const material = new THREE.MeshNormalMaterial();
+geometry.computeVertexNormals();
+const material = new THREE.MeshPhongMaterial({
+    color: 0xbdbdbd,
+    shininess: 35,
+    specular: 0x333333,
+    side: THREE.DoubleSide
+});
 
       visores.forEach((visor) => {
         visor.removeObject3D("mesh");
