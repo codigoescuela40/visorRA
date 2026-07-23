@@ -1,3 +1,4 @@
+console.log("MODEL LOADER VERSION 1.0");
 window.ModelLoader = {
 
     aplicarEscala(visores, escala) {
