@@ -1,5 +1,18 @@
 window.ModelLoader = {
 
+    aplicarEscala(visores, escala) {
+
+        visores.forEach((visor) => {
+
+            visor.setAttribute(
+                "scale",
+                `${escala} ${escala} ${escala}`
+            );
+
+        });
+
+    },
+
     cargarGLB(url, visores, escalaInicial, onEscalaCalculada) {
 
         visores.forEach((visor, indice) => {
@@ -7,10 +20,12 @@ window.ModelLoader = {
             visor.removeAttribute("gltf-model");
 
             visor.setAttribute("gltf-model", url);
+
             visor.setAttribute(
                 "scale",
                 `${escalaInicial} ${escalaInicial} ${escalaInicial}`
             );
+
             visor.setAttribute("visible", true);
 
             visor.addEventListener("model-loaded", (e) => {
@@ -20,9 +35,7 @@ window.ModelLoader = {
 
                 const modelo = e.detail.model;
 
-                // ----------------------------------------------------
-                // BoundingBox REAL del modelo
-                // ----------------------------------------------------
+                // Bounding Box del modelo
                 const caja = new THREE.Box3().setFromObject(modelo);
 
                 const tamaño = new THREE.Vector3();
@@ -31,43 +44,31 @@ window.ModelLoader = {
                 const centro = new THREE.Vector3();
                 caja.getCenter(centro);
 
-                console.log("=== BOX3 OFICIAL ===");
-                console.log("Centro:", centro);
-                console.log("Tamaño:", tamaño);
-
-                // ----------------------------------------------------
-                // Centrado automático
-                // ----------------------------------------------------
+                // Intento de centrado (seguiremos trabajando sobre él)
                 modelo.position.sub(centro);
 
-                console.log("Nueva posición:", modelo.position);
-
-                // ----------------------------------------------------
-                // Autoescalado
-                // ----------------------------------------------------
                 const mayor = Math.max(
                     tamaño.x,
                     tamaño.y,
                     tamaño.z
                 );
 
-                console.log("Lado mayor:", mayor);
-
                 const TAMAÑO_OBJETIVO = 0.8;
 
                 const escalaCalculada =
                     TAMAÑO_OBJETIVO / mayor;
 
-                console.log("Escala calculada:", escalaCalculada);
-
-                visores.forEach(v => {
-
-                    v.setAttribute(
-                        "scale",
-                        `${escalaCalculada} ${escalaCalculada} ${escalaCalculada}`
-                    );
-
+                console.log({
+                    tipo: "GLB",
+                    centro,
+                    tamaño,
+                    escala: escalaCalculada
                 });
+
+                this.aplicarEscala(
+                    visores,
+                    escalaCalculada
+                );
 
                 if (onEscalaCalculada) {
                     onEscalaCalculada(escalaCalculada);
@@ -99,24 +100,23 @@ window.ModelLoader = {
             const centro = new THREE.Vector3();
             caja.getCenter(centro);
 
-            console.log("Caja STL:", caja);
-            console.log("Centro STL:", centro);
-            console.log("Tamaño STL:", tamaño);
-
             const mayor = Math.max(
                 tamaño.x,
                 tamaño.y,
                 tamaño.z
             );
 
-            console.log("Lado mayor STL:", mayor);
-
             const TAMAÑO_OBJETIVO = 0.8;
 
             const escalaCalculada =
                 TAMAÑO_OBJETIVO / mayor;
 
-            console.log("Escala STL:", escalaCalculada);
+            console.log({
+                tipo: "STL",
+                centro,
+                tamaño,
+                escala: escalaCalculada
+            });
 
             const material = new THREE.MeshPhongMaterial({
                 color: 0xbdbdbd,
@@ -135,9 +135,6 @@ window.ModelLoader = {
 
                 mesh.rotation.x = -Math.PI / 2;
 
-                // -----------------------------
-                // CENTRADO AUTOMÁTICO STL
-                // -----------------------------
                 mesh.position.set(
                     -centro.x,
                     -centro.y,
@@ -146,14 +143,14 @@ window.ModelLoader = {
 
                 visor.setObject3D("mesh", mesh);
 
-                visor.setAttribute(
-                    "scale",
-                    `${escalaCalculada} ${escalaCalculada} ${escalaCalculada}`
-                );
-
                 visor.setAttribute("visible", true);
 
             });
+
+            this.aplicarEscala(
+                visores,
+                escalaCalculada
+            );
 
             if (onEscalaCalculada) {
                 onEscalaCalculada(escalaCalculada);
