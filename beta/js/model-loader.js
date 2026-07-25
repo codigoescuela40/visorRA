@@ -1,96 +1,107 @@
 window.ModelLoader = {
   cargarGLB(url, visores, escalaInicial, onEscalaCalculada) {
-  
-      visores.forEach((visor, indice) => {
-  
-          visor.removeAttribute("gltf-model");
-  
-          visor.setAttribute("gltf-model", url);
-          visor.setAttribute(
-              "scale",
-              `${escalaInicial} ${escalaInicial} ${escalaInicial}`
-          );
-          visor.setAttribute("visible", true);
-  
-          visor.addEventListener("model-loaded", (e) => {
-  
-              // Sólo calculamos una vez
-              if (indice !== 0) return;
-  
-              const modelo = e.detail.model;
-  
-              let cajaGlobal = new THREE.Box3();
-              let primera = true;
-  
-              modelo.updateMatrixWorld(true);
-  
-              modelo.traverse((obj) => {
-  
-                  if (!obj.isMesh || !obj.geometry) return;
-  
-                  obj.geometry.computeBoundingBox();
-  
-                  const caja = obj.geometry.boundingBox.clone();
-  
-                  // MUY IMPORTANTE:
-                  // Convertimos la caja local a coordenadas mundiales
 
-console.log("BoundingBox local:", obj.geometry.boundingBox);
-console.log("MatrixWorld:", obj.matrixWorld.elements);
-                
-                  caja.applyMatrix4(obj.matrixWorld);
-  console.log("BoundingBox mundial:", caja);
-                  if (primera) {
-                      cajaGlobal.copy(caja);
-                      primera = false;
-                  } else {
-                      cajaGlobal.union(caja);
-                  }
-  
-              });
-  
-              const tamaño = new THREE.Vector3();
-              cajaGlobal.getSize(tamaño);
-  
-              const centroGLB = new THREE.Vector3();
-              cajaGlobal.getCenter(centroGLB);
-  
-              console.log("Centro GLB:", centroGLB);
-              console.log("Tamaño GLB:", tamaño);
-  
-              const mayor = Math.max(
-                  tamaño.x,
-                  tamaño.y,
-                  tamaño.z
-              );
-  
-              console.log("Lado mayor:", mayor);
-  
-              const TAMAÑO_OBJETIVO = 0.8;
-  
-              const escalaCalculada =
-                  TAMAÑO_OBJETIVO / mayor;
-  
-              console.log("Escala calculada:", escalaCalculada);
-  
-              visores.forEach(v => {
-  
-                  v.setAttribute(
-                      "scale",
-                      `${escalaCalculada} ${escalaCalculada} ${escalaCalculada}`
-                  );
-  
-              });
-  
-              if (onEscalaCalculada) {
-                  onEscalaCalculada(escalaCalculada);
-              }
-  
-          }, { once: true });
-  
-      });
-  
-  },
+    visores.forEach((visor, indice) => {
+
+        visor.removeAttribute("gltf-model");
+
+        visor.setAttribute("gltf-model", url);
+
+        visor.setAttribute(
+            "scale",
+            `${escalaInicial} ${escalaInicial} ${escalaInicial}`
+        );
+
+        visor.setAttribute("visible", true);
+
+        visor.addEventListener("model-loaded", (e) => {
+
+            // Sólo el primer visor hace los cálculos
+            if (indice !== 0) return;
+
+            requestAnimationFrame(() => {
+
+                const modelo = e.detail.model;
+
+                modelo.updateMatrix();
+                modelo.updateWorldMatrix(true, true);
+                modelo.updateMatrixWorld(true);
+
+                let cajaGlobal = new THREE.Box3();
+                let primera = true;
+
+                modelo.traverse((obj) => {
+
+                    if (!obj.isMesh || !obj.geometry) return;
+
+                    obj.updateMatrix();
+                    obj.updateWorldMatrix(true, false);
+                    obj.updateMatrixWorld(true);
+
+                    obj.geometry.computeBoundingBox();
+
+                    const caja = obj.geometry.boundingBox.clone();
+
+                    console.log("BoundingBox local:", caja);
+                    console.log("MatrixWorld:", obj.matrixWorld.elements);
+
+                    caja.applyMatrix4(obj.matrixWorld);
+
+                    console.log("BoundingBox mundial:", caja);
+
+                    if (primera) {
+                        cajaGlobal.copy(caja);
+                        primera = false;
+                    } else {
+                        cajaGlobal.union(caja);
+                    }
+
+                });
+
+                const tamaño = new THREE.Vector3();
+                cajaGlobal.getSize(tamaño);
+
+                const centroGLB = new THREE.Vector3();
+                cajaGlobal.getCenter(centroGLB);
+
+                console.log("Centro GLB:", centroGLB);
+                console.log("Tamaño GLB:", tamaño);
+
+                const mayor = Math.max(
+                    tamaño.x,
+                    tamaño.y,
+                    tamaño.z
+                );
+
+                console.log("Lado mayor:", mayor);
+
+                const TAMAÑO_OBJETIVO = 0.8;
+
+                const escalaCalculada =
+                    TAMAÑO_OBJETIVO / mayor;
+
+                console.log("Escala calculada:", escalaCalculada);
+
+                visores.forEach((v) => {
+
+                    v.setAttribute(
+                        "scale",
+                        `${escalaCalculada} ${escalaCalculada} ${escalaCalculada}`
+                    );
+
+                });
+
+                if (onEscalaCalculada) {
+                    onEscalaCalculada(escalaCalculada);
+                }
+
+            });
+
+        }, { once: true });
+
+    });
+
+},
 
   cargarSTL(url, visores, escalaInicial, onEscalaCalculada) {
     const loader = new THREE.STLLoader();
