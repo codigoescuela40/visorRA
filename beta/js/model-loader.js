@@ -39,11 +39,6 @@ window.ModelLoader = {
 
           const centroGLB = new THREE.Vector3();
           cajaGlobal.getCenter(centroGLB);
-console.log("Posición visor:", visores[0].getAttribute("position"));
-console.log("Posición modelo:", modelo.position);
-          console.log("Caja GLB:", cajaGlobal);
-          console.log("Centro GLB:", centroGLB);
-          console.log("Tamaño GLB:", tamaño);
 
           const mayor = Math.max(
             tamaño.x,
@@ -51,13 +46,9 @@ console.log("Posición modelo:", modelo.position);
             tamaño.z
           );
 
-          console.log("Lado mayor:", mayor);
-
           // Queremos que el modelo ocupe unos 8 cm virtuales
           const TAMAÑO_OBJETIVO = 0.8;
           const escalaCalculada = TAMAÑO_OBJETIVO / mayor;
-
-          console.log("Escala calculada:", escalaCalculada);
 
           // Aplicar la escala a los 6 visores
           visores.forEach((v) => {
@@ -81,7 +72,6 @@ console.log("Posición modelo:", modelo.position);
     const loader = new THREE.STLLoader();
 
     loader.load(url, (geometry) => {
-      console.log("STL cargado");
 
       geometry.computeBoundingBox();
 
@@ -93,29 +83,23 @@ console.log("Posición modelo:", modelo.position);
       const centroSTL = new THREE.Vector3();
       caja.getCenter(centroSTL);
 
-      console.log("Caja STL:", caja);
-      console.log("Centro STL:", centroSTL);
-      console.log("Tamaño STL:", tamaño);
-
       const mayor = Math.max(
         tamaño.x,
         tamaño.y,
         tamaño.z
       );
 
-      console.log("Lado mayor STL:", mayor);
-
       const TAMAÑO_OBJETIVO = 0.8;
       const escalaCalculada = TAMAÑO_OBJETIVO / mayor;
 
-      console.log("Escala STL:", escalaCalculada);
-geometry.computeVertexNormals();
-const material = new THREE.MeshPhongMaterial({
-    color: 0xbdbdbd,
-    shininess: 35,
-    specular: 0x333333,
-    side: THREE.DoubleSide
-});
+
+      geometry.computeVertexNormals();
+      const material = new THREE.MeshPhongMaterial({
+          color: 0xbdbdbd,
+          shininess: 35,
+          specular: 0x333333,
+          side: THREE.DoubleSide
+      });
 
       visores.forEach((visor) => {
         visor.removeObject3D("mesh");
