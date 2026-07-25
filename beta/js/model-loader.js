@@ -17,33 +17,16 @@ window.ModelLoader = {
 
           const modelo = e.detail.model;
 
-          let cajaGlobal = new THREE.Box3();
-          let primera = true;
+const cajaGlobal = new THREE.Box3().setFromObject(modelo);
 
-          modelo.traverse((obj) => {
-            if (!obj.isMesh || !obj.geometry) return;
+const tamaño = new THREE.Vector3();
+cajaGlobal.getSize(tamaño);
 
-            obj.geometry.computeBoundingBox();
-            const caja = obj.geometry.boundingBox.clone();
+const centroGLB = new THREE.Vector3();
+cajaGlobal.getCenter(centroGLB);
 
-            if (primera) {
-              cajaGlobal.copy(caja);
-              primera = false;
-            } else {
-              cajaGlobal.union(caja);
-            }
-          });
-
-          const tamaño = new THREE.Vector3();
-          cajaGlobal.getSize(tamaño);
-
-          const centroGLB = new THREE.Vector3();
-          cajaGlobal.getCenter(centroGLB);
-console.log("Posición visor:", visores[0].getAttribute("position"));
-console.log("Posición modelo:", modelo.position);
-          console.log("Caja GLB:", cajaGlobal);
-          console.log("Centro GLB:", centroGLB);
-          console.log("Tamaño GLB:", tamaño);
+console.log("Centro GLB:", centroGLB);
+console.log("Tamaño GLB:", tamaño);
 
           const mayor = Math.max(
             tamaño.x,
