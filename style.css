@@ -10,27 +10,22 @@ html, body {
 }
 
 /* Interfaz flotante (Panel inferior centrado en forma de píldora) */
-#panel {
-    position: fixed;
-    bottom: 24px;
-    left: 50%;
-    transform: translateX(-50%);
-    z-index: 999;
-    
-    /* Efecto Cristal Translúcido moderno */
-    background: rgba(255, 255, 255, 0.75);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
-    border: 1px solid rgba(255, 255, 255, 0.4);
-    
-    padding: 10px 20px;
-    border-radius: 40px;
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
-    
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    white-space: nowrap;
+#panel{
+    position:fixed;
+    top:20px;
+    left:20px;
+    width:280px;
+    z-index:999;
+    background:rgba(255,255,255,.80);
+    backdrop-filter:blur(12px);
+    -webkit-backdrop-filter:blur(12px);
+    border:1px solid rgba(255,255,255,.4);
+    border-radius:18px;
+    padding:14px;
+    box-shadow:0 8px 32px rgba(0,0,0,.20);
+    display:flex;
+    flex-direction:column;
+    gap:10px;
 }
 
 /* Estilo para camuflar el input file nativo */
@@ -40,8 +35,8 @@ html, body {
     cursor: pointer;
     background: rgba(0, 0, 0, 0.06);
     border-radius: 20px;
-    font-size: 13px;
-    font-weight: 500;
+    font-size: 15px;
+    font-weight: 600;
     color: #222;
     border: 1px solid rgba(0, 0, 0, 0.05);
     transition: background 0.2s;
@@ -58,23 +53,24 @@ html, body {
 
 #modelo-cargado{
     color: #b0b0b0;
-    font-size:14px;
+    font-size:13px;
     font-style:italic;
 }
 .control{
     display:flex;
-    flex-direction:column;
-    gap:4px;
-    min-width:170px;
+    align-items:center;
+    gap:8px;
 }
 
 .control label{
+    width:38px;
     font-size:12px;
-    font-weight:600;
-    color:#444;
+    font-weight:500;
+    color:#666;
+    flex-shrink:0;
 }
 
 .control input[type="range"]{
-    width:170px;
-    cursor:pointer;
+    flex:1;
+    height:4px;
 }
