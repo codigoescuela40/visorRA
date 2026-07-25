@@ -8,6 +8,9 @@ window.addEventListener("DOMContentLoaded", () => {
     const luz1 = document.getElementById("luz-1");
     const luz2 = document.getElementById("luz-2");
     const luz3 = document.getElementById("luz-3");
+    const xSlider = document.getElementById("x-slider");
+    const ySlider = document.getElementById("y-slider");
+    const zSlider = document.getElementById("z-slider");
     
     // En lugar de un solo visor, seleccionamos los 6 visores del cubo
     const visores = document.querySelectorAll(".visor-cubo");
@@ -25,7 +28,18 @@ window.addEventListener("DOMContentLoaded", () => {
             );
         });
     }
+    function aplicarPosicion() {
+        const x = parseFloat(xSlider.value);
+        const y = parseFloat(ySlider.value);
+        const z = parseFloat(zSlider.value);
     
+        visores.forEach((visor) => {
+            visor.setAttribute(
+                "position",
+                `${x} ${y} ${z}`
+            );
+        });
+    }
    
     let urlActual = null;
 
@@ -41,6 +55,12 @@ window.addEventListener("DOMContentLoaded", () => {
         zoomSlider.value = 1;
         lightSlider.value = 1.5;
         lightSlider.dispatchEvent(new Event("input"));
+        xSlider.value = 0;
+        ySlider.value = 0;
+        zSlider.value = 0;
+        
+        aplicarPosicion();
+
         
         modeloCargado.textContent = archivo.name;
         
@@ -83,6 +103,14 @@ window.addEventListener("DOMContentLoaded", () => {
         luz3.setAttribute("light", "intensity", intensidad * 0.4);
     });
     
+    xSlider.addEventListener("input", aplicarPosicion);
+
+    ySlider.addEventListener("input", aplicarPosicion);
+
+    zSlider.addEventListener("input", aplicarPosicion);
+    
     lightSlider.dispatchEvent(new Event("input"));
+
+   
 });
 
