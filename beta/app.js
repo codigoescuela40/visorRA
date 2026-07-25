@@ -39,6 +39,8 @@ window.addEventListener("DOMContentLoaded", () => {
         // Reiniciar zoom para cada nuevo modelo
         zoomUsuario = 1;
         zoomSlider.value = 1;
+        lightSlider.value = 1.5;
+        lightSlider.dispatchEvent(new Event("input"));
         
         modeloCargado.textContent = archivo.name;
         
