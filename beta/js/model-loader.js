@@ -28,6 +28,21 @@ modelo.traverse((obj) => {
         obj.geometry
     );
 });
+
+modelo.traverse((obj) => {
+    if (obj.isMesh) {
+        console.log("Matriz:", obj.matrixWorld);
+
+        const caja = new THREE.Box3().setFromObject(obj);
+
+        const c = new THREE.Vector3();
+        caja.getCenter(c);
+
+        console.log("Caja Mesh:", caja);
+        console.log("Centro Mesh:", c);
+    }
+});
+          
 modelo.updateMatrix();
 modelo.updateMatrixWorld(true);
 const cajaGlobal = new THREE.Box3().setFromObject(modelo);
