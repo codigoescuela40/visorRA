@@ -1,83 +1,81 @@
 window.ModelLoader = {
- cargarGLB(url, visores, escalaInicial, onEscalaCalculada) {
-
+  cargarGLB(url, visores, escalaInicial, onEscalaCalculada) {
     visores.forEach((visor, indice) => {
+      visor.removeAttribute("gltf-model");
+      visor.setAttribute("gltf-model", url);
+      visor.setAttribute(
+        "scale",
+        `${escalaInicial} ${escalaInicial} ${escalaInicial}`
+      );
+      visor.setAttribute("visible", true);
 
-        visor.removeAttribute("gltf-model");
+      visor.addEventListener(
+        "model-loaded",
+        (e) => {
+          // Sólo calculamos la escala una vez (primer visor)
+          if (indice !== 0) return;
 
-        visor.setAttribute("gltf-model", url);
+          const modelo = e.detail.model;
 
-        visor.setAttribute(
-            "scale",
-            `${escalaInicial} ${escalaInicial} ${escalaInicial}`
-        );
+          let cajaGlobal = new THREE.Box3();
+          let primera = true;
 
-        visor.setAttribute("visible", true);
+          modelo.traverse((obj) => {
+            if (!obj.isMesh || !obj.geometry) return;
 
-        visor.addEventListener("model-loaded", (e) => {
+            obj.geometry.computeBoundingBox();
+            const caja = obj.geometry.boundingBox.clone();
 
-            // Sólo el primer visor calcula la escala
-            if (indice !== 0) return;
+            if (primera) {
+              cajaGlobal.copy(caja);
+              primera = false;
+            } else {
+              cajaGlobal.union(caja);
+            }
+          });
 
-            const modelo = e.detail.model;
+          const tamaño = new THREE.Vector3();
+          cajaGlobal.getSize(tamaño);
 
-            // Esperamos dos frames para que A-Frame termine
-            requestAnimationFrame(() => {
+          const centroGLB = new THREE.Vector3();
+          cajaGlobal.getCenter(centroGLB);
+console.log("Posición visor:", visores[0].getAttribute("position"));
+console.log("Posición modelo:", modelo.position);
+          console.log("Caja GLB:", cajaGlobal);
+          console.log("Centro GLB:", centroGLB);
+          console.log("Tamaño GLB:", tamaño);
 
-                requestAnimationFrame(() => {
+          const mayor = Math.max(
+            tamaño.x,
+            tamaño.y,
+            tamaño.z
+          );
 
-                    const caja = new THREE.Box3().setFromObject(modelo);
+          console.log("Lado mayor:", mayor);
 
-                    const tamaño = new THREE.Vector3();
-                    caja.getSize(tamaño);
+          // Queremos que el modelo ocupe unos 8 cm virtuales
+          const TAMAÑO_OBJETIVO = 0.8;
+          const escalaCalculada = TAMAÑO_OBJETIVO / mayor;
 
-                    const centro = new THREE.Vector3();
-                    caja.getCenter(centro);
+          console.log("Escala calculada:", escalaCalculada);
 
-                    console.log("Caja:", caja);
-                    console.log("Centro:", centro);
-                    console.log("Tamaño:", tamaño);
+          // Aplicar la escala a los 6 visores
+          visores.forEach((v) => {
+            v.setAttribute(
+              "scale",
+              `${escalaCalculada} ${escalaCalculada} ${escalaCalculada}`
+            );
+          });
 
-                    const mayor = Math.max(
-                        tamaño.x,
-                        tamaño.y,
-                        tamaño.z
-                    );
-
-                    if (!isFinite(mayor) || mayor === 0) {
-                        console.warn("No se pudo calcular el tamaño del GLB");
-                        return;
-                    }
-
-                    const TAMAÑO_OBJETIVO = 0.8;
-
-                    const escalaCalculada =
-                        TAMAÑO_OBJETIVO / mayor;
-
-                    console.log("Escala:", escalaCalculada);
-
-                    visores.forEach(v => {
-
-                        v.setAttribute(
-                            "scale",
-                            `${escalaCalculada} ${escalaCalculada} ${escalaCalculada}`
-                        );
-
-                    });
-
-                    if (onEscalaCalculada) {
-                        onEscalaCalculada(escalaCalculada);
-                    }
-
-                });
-
-            });
-
-        }, { once: true });
-
+          // Avisar al app.js
+          if (onEscalaCalculada) {
+            onEscalaCalculada(escalaCalculada);
+          }
+        },
+        { once: true }
+      );
     });
-
-},
+  },
 
   cargarSTL(url, visores, escalaInicial, onEscalaCalculada) {
     const loader = new THREE.STLLoader();
