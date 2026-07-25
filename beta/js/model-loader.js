@@ -22,6 +22,9 @@ window.ModelLoader = {
             requestAnimationFrame(() => {
 
                 const modelo = e.detail.model;
+              console.log("Entity object3D:", visor.object3D);
+console.log("Entity matrixWorld:", visor.object3D.matrixWorld.elements);
+              
 console.log("Padre:", modelo.parent);
 console.log("Escena:", modelo.parent?.parent);
 console.log("Visible:", modelo.visible);
