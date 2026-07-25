@@ -22,7 +22,12 @@ window.ModelLoader = {
             requestAnimationFrame(() => {
 
                 const modelo = e.detail.model;
-
+console.log("Padre:", modelo.parent);
+console.log("Escena:", modelo.parent?.parent);
+console.log("Visible:", modelo.visible);
+console.log("AutoUpdate:", modelo.matrixAutoUpdate);
+console.log("Matrix:", modelo.matrix.elements);
+console.log("MatrixWorld:", modelo.matrixWorld.elements);
                 modelo.updateMatrix();
                 modelo.updateWorldMatrix(true, true);
                 modelo.updateMatrixWorld(true);
