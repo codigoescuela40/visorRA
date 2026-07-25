@@ -30,6 +30,22 @@
             <label for="light-slider"> 💡 Luz</label>
             <input id="light-slider" type="range" min="0.2" max="5" step="0.05" value="1.5">
         </div>
+
+        <div class="control">
+            <label for="x-slider">↔ X</label>
+            <input id="x-slider" type="range" min="-0.10" max="0.10" step="0.001" value="0">
+        </div>
+        
+        <div class="control">
+            <label for="y-slider">↕ Y</label>
+            <input id="y-slider" type="range" min="-0.10" max="0.10" step="0.001" value="0">
+        </div>
+        
+        <div class="control">
+            <label for="z-slider">⤢ Z</label>
+            <input id="z-slider" type="range" min="-0.10" max="0.10" step="0.001" value="0">
+        </div>
+
         
     </div>
 
@@ -42,19 +58,20 @@
         <a-camera position="0 0 0" look-controls="enabled:false"></a-camera>
 
         <a-entity id="cara-superior" mindar-image-target="targetIndex: 0">
-            <a-entity class="visor-cubo" gltf-model="" position="0 0 -0.05" rotation="0 180 0" scale="0.01 0.01 0.01" visible="false"></a-entity>
+            <a-entity class="visor-cubo" gltf-model="" position="0 0 -0.05" rotation="90 0 0" scale="0.01 0.01 0.01" visible="false"></a-entity>
         </a-entity>
 
         <a-entity id="cara-frontal" mindar-image-target="targetIndex: 1">
             <a-entity class="visor-cubo" gltf-model="" position="0 0 -0.05" rotation="0 0 0" scale="0.01 0.01 0.01" visible="false"></a-entity>
         </a-entity>
-
+        <!-- Primero rectificamos la imagen con una rotación 0 0 90-->
         <a-entity id="cara-derecha" mindar-image-target="targetIndex: 2">
-            <a-entity class="visor-cubo" gltf-model="" position="0 0 -0.05" rotation="0 0 90" scale="0.01 0.01 0.01" visible="false"></a-entity>
+            <a-entity class="visor-cubo" gltf-model="" position="0 0 -0.05" rotation="90 0 90" scale="0.01 0.01 0.01" visible="false"></a-entity>
         </a-entity>
 
+        <!-- Primero rectificamos la imagen con una rotación 0 0 -90-->
         <a-entity id="cara-izquierda" mindar-image-target="targetIndex: 3">
-            <a-entity class="visor-cubo" gltf-model="" position="0 0 -0.05" rotation="0 0 -90" scale="0.01 0.01 0.01" visible="false"></a-entity>
+            <a-entity class="visor-cubo" gltf-model="" position="0 0 -0.05" rotation="90 0 -90" scale="0.01 0.01 0.01" visible="false"></a-entity>
         </a-entity>
 
         <a-entity id="cara-trasera" mindar-image-target="targetIndex: 4">
@@ -62,7 +79,7 @@
         </a-entity>
 
         <a-entity id="cara-inferior" mindar-image-target="targetIndex: 5">
-            <a-entity class="visor-cubo" gltf-model="" position="0 0 -0.05" rotation="0 180 180" scale="0.01 0.01 0.01" visible="false"></a-entity>
+            <a-entity class="visor-cubo" gltf-model="" position="0 0 -0.05" rotation="-90 0 0" scale="0.01 0.01 0.01" visible="false"></a-entity>
         </a-entity>
             
         <a-light id="luz-ambiente" type="ambient" color="#ffffff" intensity="1.5"></a-light>
