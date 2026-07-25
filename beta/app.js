@@ -4,6 +4,10 @@ window.addEventListener("DOMContentLoaded", () => {
     const modeloCargado = document.getElementById("modelo-cargado");    
     const zoomSlider = document.getElementById("zoom-slider");
     const lightSlider = document.getElementById("light-slider");
+    const luzAmbiente = document.getElementById("luz-ambiente");
+    const luz1 = document.getElementById("luz-1");
+    const luz2 = document.getElementById("luz-2");
+    const luz3 = document.getElementById("luz-3");
     
     // En lugar de un solo visor, seleccionamos los 6 visores del cubo
     const visores = document.querySelectorAll(".visor-cubo");
@@ -70,8 +74,13 @@ window.addEventListener("DOMContentLoaded", () => {
     });
 
     lightSlider.addEventListener("input", () => {
-        console.log("Luz:", lightSlider.value);
+        const intensidad = parseFloat(lightSlider.value);
+        luzAmbiente.setAttribute("light", "intensity", intensidad);
+        luz1.setAttribute("light", "intensity", intensidad * 0.8);
+        luz2.setAttribute("light", "intensity", intensidad * 0.8);
+        luz3.setAttribute("light", "intensity", intensidad * 0.4);
     });
-
+    
+    lightSlider.dispatchEvent(new Event("input"));
 });
 
