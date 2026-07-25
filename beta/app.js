@@ -1,10 +1,9 @@
 window.addEventListener("DOMContentLoaded", () => {
 
     const input = document.getElementById("archivo");
-    const btnMas = document.getElementById("btn-mas");
-    const btnMenos = document.getElementById("btn-menos");
     const modeloCargado = document.getElementById("modelo-cargado");    
-    const zoomInfo = document.getElementById("zoom-info");
+    const zoomSlider = document.getElementById("zoom-slider");
+    const lightSlider = document.getElementById("light-slider");
     
     // En lugar de un solo visor, seleccionamos los 6 visores del cubo
     const visores = document.querySelectorAll(".visor-cubo");
@@ -23,10 +22,7 @@ window.addEventListener("DOMContentLoaded", () => {
         });
     }
     
-    function actualizarZoom() {
-        zoomInfo.textContent = `Zoom x${zoomUsuario.toPrecision(3)}`;
-    }
-    
+   
     let urlActual = null;
 
     // --- LÓGICA DE CARGA: SE INYECTA A LOS 6 VISORES AL MISMO TIEMPO ---
@@ -38,7 +34,7 @@ window.addEventListener("DOMContentLoaded", () => {
         
         // Reiniciar zoom para cada nuevo modelo
         zoomUsuario = 1;
-        actualizarZoom();
+        zoomSlider.value = 1;
         
         modeloCargado.textContent = archivo.name;
         
@@ -54,14 +50,12 @@ window.addEventListener("DOMContentLoaded", () => {
             ModelLoader.cargarGLB(urlActual, visores, 0.01, (escala) => {
                     escalaBase = escala;
                     aplicarEscala();
-                    actualizarZoom();
                 }
             );
         } else if (extension === "stl") {
             ModelLoader.cargarSTL(urlActual, visores, 0.01, (escala) => {
                     escalaBase = escala;
                     aplicarEscala();
-                    actualizarZoom();
                 }
             );
         } else {
@@ -70,17 +64,14 @@ window.addEventListener("DOMContentLoaded", () => {
         
     });
 
-    // --- LÓGICA DE BOTONES: ESCALAN LOS 6 VISORES EN PARALELO ---
-    btnMas.addEventListener("click", () => {
-        zoomUsuario *= FACTOR_ESCALA;
+    zoomSlider.addEventListener("input", () => {
+        zoomUsuario = parseFloat(zoomSlider.value);
         aplicarEscala();
-        actualizarZoom();
     });
-        
-    btnMenos.addEventListener("click", () => {
-        zoomUsuario /= FACTOR_ESCALA;
-        aplicarEscala();
-        actualizarZoom();
+
+    lightSlider.addEventListener("input", () => {
+        console.log("Luz:", lightSlider.value);
     });
+
 });
 
