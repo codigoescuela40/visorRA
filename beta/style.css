@@ -56,37 +56,26 @@ html, body {
     display: none;
 }
 
-/* Botones de Acción (Ampliar / Reducir) */
-.btn-control {
-    background: #1a73e8;
-    color: white;
-    border: none;
-    padding: 9px 18px;
-    border-radius: 20px;
-    font-size: 13px;
-    font-weight: bold;
-    cursor: pointer;
-    box-shadow: 0 2px 6px rgba(26, 115, 232, 0.25);
-    transition: background 0.2s, transform 0.1s;
-}
-
-.btn-control:hover {
-    background: #1557b0;
-}
-
-.btn-control:active {
-    transform: scale(0.95);
-}
-
 #modelo-cargado{
     margin-left:12px;
     color: #b0b0b0;
     font-size:14px;
     font-style:italic;
 }
-#zoom-info {
-    margin-left: 12px;
-    color: #b0b0b0;
-    font-size: 14px;
-    font-weight: 600;
+.control{
+    display:flex;
+    flex-direction:column;
+    gap:4px;
+    min-width:170px;
+}
+
+.control label{
+    font-size:12px;
+    font-weight:600;
+    color:#444;
+}
+
+.control input[type="range"]{
+    width:170px;
+    cursor:pointer;
 }
