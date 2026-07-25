@@ -57,7 +57,7 @@ window.addEventListener("DOMContentLoaded", () => {
         lightSlider.dispatchEvent(new Event("input"));
         xSlider.value = 0;
         ySlider.value = 0;
-        zSlider.value = -0.05;
+        zSlider.value = 0;
         
         aplicarPosicion();
 
