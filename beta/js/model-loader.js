@@ -34,8 +34,12 @@ window.ModelLoader = {
   
                   // MUY IMPORTANTE:
                   // Convertimos la caja local a coordenadas mundiales
+
+console.log("BoundingBox local:", obj.geometry.boundingBox);
+console.log("MatrixWorld:", obj.matrixWorld.elements);
+                
                   caja.applyMatrix4(obj.matrixWorld);
-  
+  console.log("BoundingBox mundial:", caja);
                   if (primera) {
                       cajaGlobal.copy(caja);
                       primera = false;
