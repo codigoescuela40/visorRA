@@ -15,7 +15,19 @@ window.ModelLoader = {
           // Sólo calculamos la escala una vez (primer visor)
           if (indice !== 0) return;
 
-          const modelo = e.detail.model;
+const modelo = e.detail.model;
+
+console.log("Modelo:", modelo);
+console.log("Tipo:", modelo.type);
+console.log("Hijos:", modelo.children);
+
+modelo.traverse((obj) => {
+    console.log(
+        obj.type,
+        obj.name,
+        obj.geometry
+    );
+});
 modelo.updateMatrix();
 modelo.updateMatrixWorld(true);
 const cajaGlobal = new THREE.Box3().setFromObject(modelo);
@@ -29,7 +41,7 @@ cajaGlobal.getCenter(centroGLB);
 console.log("Centro GLB:", centroGLB);
 console.log("Tamaño GLB:", tamaño);
 
-          const mayor = Math.max(
+         const mayor = Math.max(
             tamaño.x,
             tamaño.y,
             tamaño.z
