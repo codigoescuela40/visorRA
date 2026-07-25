@@ -1,5 +1,5 @@
 window.ModelLoader = {
-  cargarGLB(url, visores, escalaInicial, onEscalaCalculada) {
+ cargarGLB(url, visores, escalaInicial, onEscalaCalculada) {
 
     visores.forEach((visor, indice) => {
 
@@ -16,92 +16,60 @@ window.ModelLoader = {
 
         visor.addEventListener("model-loaded", (e) => {
 
-            // Sólo el primer visor hace los cálculos
+            // Sólo el primer visor calcula la escala
             if (indice !== 0) return;
 
+            const modelo = e.detail.model;
+
+            // Esperamos dos frames para que A-Frame termine
             requestAnimationFrame(() => {
 
-                const modelo = e.detail.model;
-              console.log("Entity object3D:", visor.object3D);
-console.log("Entity matrixWorld:", visor.object3D.matrixWorld.elements);
-              
-console.log("Padre:", modelo.parent);
-console.log("Escena:", modelo.parent?.parent);
-console.log("Visible:", modelo.visible);
-console.log("AutoUpdate:", modelo.matrixAutoUpdate);
-console.log("Matrix:", modelo.matrix.elements);
-console.log("MatrixWorld:", modelo.matrixWorld.elements);
-                modelo.updateMatrix();
-                modelo.updateWorldMatrix(true, true);
-                modelo.updateMatrixWorld(true);
+                requestAnimationFrame(() => {
 
-                let cajaGlobal = new THREE.Box3();
-                let primera = true;
+                    const caja = new THREE.Box3().setFromObject(modelo);
 
-                modelo.traverse((obj) => {
+                    const tamaño = new THREE.Vector3();
+                    caja.getSize(tamaño);
 
-                    if (!obj.isMesh || !obj.geometry) return;
+                    const centro = new THREE.Vector3();
+                    caja.getCenter(centro);
 
-                    obj.updateMatrix();
-                    obj.updateWorldMatrix(true, false);
-                    obj.updateMatrixWorld(true);
+                    console.log("Caja:", caja);
+                    console.log("Centro:", centro);
+                    console.log("Tamaño:", tamaño);
 
-                    obj.geometry.computeBoundingBox();
+                    const mayor = Math.max(
+                        tamaño.x,
+                        tamaño.y,
+                        tamaño.z
+                    );
 
-                    const caja = obj.geometry.boundingBox.clone();
+                    if (!isFinite(mayor) || mayor === 0) {
+                        console.warn("No se pudo calcular el tamaño del GLB");
+                        return;
+                    }
 
-                    console.log("BoundingBox local:", caja);
-                    console.log("MatrixWorld:", obj.matrixWorld.elements);
+                    const TAMAÑO_OBJETIVO = 0.8;
 
-                    caja.applyMatrix4(obj.matrixWorld);
+                    const escalaCalculada =
+                        TAMAÑO_OBJETIVO / mayor;
 
-                    console.log("BoundingBox mundial:", caja);
+                    console.log("Escala:", escalaCalculada);
 
-                    if (primera) {
-                        cajaGlobal.copy(caja);
-                        primera = false;
-                    } else {
-                        cajaGlobal.union(caja);
+                    visores.forEach(v => {
+
+                        v.setAttribute(
+                            "scale",
+                            `${escalaCalculada} ${escalaCalculada} ${escalaCalculada}`
+                        );
+
+                    });
+
+                    if (onEscalaCalculada) {
+                        onEscalaCalculada(escalaCalculada);
                     }
 
                 });
-
-                const tamaño = new THREE.Vector3();
-                cajaGlobal.getSize(tamaño);
-
-                const centroGLB = new THREE.Vector3();
-                cajaGlobal.getCenter(centroGLB);
-
-                console.log("Centro GLB:", centroGLB);
-                console.log("Tamaño GLB:", tamaño);
-
-                const mayor = Math.max(
-                    tamaño.x,
-                    tamaño.y,
-                    tamaño.z
-                );
-
-                console.log("Lado mayor:", mayor);
-
-                const TAMAÑO_OBJETIVO = 0.8;
-
-                const escalaCalculada =
-                    TAMAÑO_OBJETIVO / mayor;
-
-                console.log("Escala calculada:", escalaCalculada);
-
-                visores.forEach((v) => {
-
-                    v.setAttribute(
-                        "scale",
-                        `${escalaCalculada} ${escalaCalculada} ${escalaCalculada}`
-                    );
-
-                });
-
-                if (onEscalaCalculada) {
-                    onEscalaCalculada(escalaCalculada);
-                }
 
             });
 
