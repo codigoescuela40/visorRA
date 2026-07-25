@@ -16,7 +16,8 @@ window.ModelLoader = {
           if (indice !== 0) return;
 
           const modelo = e.detail.model;
-
+modelo.updateMatrix();
+modelo.updateMatrixWorld(true);
 const cajaGlobal = new THREE.Box3().setFromObject(modelo);
 
 const tamaño = new THREE.Vector3();
