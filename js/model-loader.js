@@ -26,7 +26,7 @@ window.ModelLoader = {
           
           let cajaGlobal = new THREE.Box3();
           let primera = true;
-
+          console.log("modeloGLB:", this.modeloGLB);
           modelo.traverse((obj) => {
             if (!obj.isMesh || !obj.geometry) return;
 
@@ -158,16 +158,11 @@ window.ModelLoader = {
 
         // Restaurar colores originales
         if (color === "original") {
-          obj.material = obj.userData.materialOriginal;
+          //obj.material = obj.userData.materialOriginal;
           return;
         }
 
-        // Creamos una copia del material una sola vez
-        if (!obj.userData.materialColor) {
-          obj.userData.materialColor = obj.material.clone();
-        }
-
-        obj.material = obj.userData.materialColor;
+        console.log("Material:", obj.material);
         obj.material.color.set(color);
         obj.material.needsUpdate = true;
 
