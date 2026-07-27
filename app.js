@@ -72,7 +72,7 @@ window.addEventListener("DOMContentLoaded", () => {
         }
 
         urlActual = URL.createObjectURL(archivo);
-        console.log("Nueva URL Blob generada:", urlActual);
+        //console.log("Nueva URL Blob generada:", urlActual);
 
         // Cargamos los visores
         if (extension === "glb") {
