@@ -28,8 +28,7 @@ window.ModelLoader = {
           let primera = true;
           
           modelo.traverse((obj) => {
-            console.log(obj.material.type);
-            console.log(obj.material.color);
+
             if (!obj.isMesh || !obj.geometry) return;
 
             obj.geometry.computeBoundingBox();
@@ -157,8 +156,6 @@ window.ModelLoader = {
     
         modelo.traverse((obj) => {
 
-        if (!obj.isMesh) return;
-
         // Guardamos el material original la primera vez
         if (!obj.userData.materialOriginal) {
           obj.userData.materialOriginal = obj.material;
@@ -170,7 +167,11 @@ window.ModelLoader = {
           return;
         }
 
+        if (!obj.isMesh) return;
+        if (!obj.material) return;
         console.log("Material:", obj.material);
+        console.log("vertexColors:", obj.material.vertexColors);
+        console.log("map:", obj.material.map);
         obj.material.color.set(color);
         obj.material.needsUpdate = true;
 
