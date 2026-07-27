@@ -141,13 +141,7 @@ window.ModelLoader = {
 
     // ===== STL =====
     if (this.meshSTL) {
-    
-        if (color === "original") {
-            this.meshSTL.material.color.set("#bdbdbd");
-        } else {
-            this.meshSTL.material.color.set(color);
-        }
-    
+        this.meshSTL.material.color.set(color);
         this.meshSTL.material.needsUpdate = true;
     }
 
@@ -155,17 +149,6 @@ window.ModelLoader = {
     this.modelosGLB.forEach((modelo) => {
     
         modelo.traverse((obj) => {
-
-        // Guardamos el material original la primera vez
-        if (!obj.userData.materialOriginal) {
-          obj.userData.materialOriginal = obj.material;
-        }
-
-        // Restaurar colores originales
-        if (color === "original") {
-          //obj.material = obj.userData.materialOriginal;
-          return;
-        }
 
         if (!obj.isMesh) return;
         if (!obj.material) return;
