@@ -1,9 +1,10 @@
 window.ModelLoader = {
   //Modificación 27 ---
-  modeloGLB: null,
+  modelosGLB: [],
   meshSTL: null,
   //-------------------
   cargarGLB(url, visores, escalaInicial, onEscalaCalculada) {
+    this.modelosGLB = [];
     visores.forEach((visor, indice) => {
       visor.removeAttribute("gltf-model");
       visor.setAttribute("gltf-model", url);
@@ -16,17 +17,16 @@ window.ModelLoader = {
       visor.addEventListener(
         "model-loaded",
         (e) => {
-          // Sólo calculamos la escala una vez (primer visor)
-          if (indice !== 0) return;
 
           const modelo = e.detail.model;
-          //Modificación 27 ---
-          this.modeloGLB = modelo;
-          //-------------------
+          this.modelosGLB.push(modelo);
+          
+          // Sólo el primer visor calcula la escala
+          if (indice !== 0) return;
           
           let cajaGlobal = new THREE.Box3();
           let primera = true;
-          console.log("modeloGLB:", this.modeloGLB);
+          
           modelo.traverse((obj) => {
             if (!obj.isMesh || !obj.geometry) return;
 
@@ -145,9 +145,9 @@ window.ModelLoader = {
     }
 
     // ===== GLB =====
-    if (this.modeloGLB) {
-
-      this.modeloGLB.traverse((obj) => {
+    this.modelosGLB.forEach((modelo) => {
+    
+        modelo.traverse((obj) => {
 
         if (!obj.isMesh) return;
 
@@ -168,7 +168,7 @@ window.ModelLoader = {
 
       });
 
-    }
+    });
 
   }
   
