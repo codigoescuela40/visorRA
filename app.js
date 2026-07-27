@@ -11,6 +11,7 @@ window.addEventListener("DOMContentLoaded", () => {
     const xSlider = document.getElementById("x-slider");
     const ySlider = document.getElementById("y-slider");
     const zSlider = document.getElementById("z-slider");
+    const botonesColor = document.querySelectorAll(".color-btn");
     
     // En lugar de un solo visor, seleccionamos los 6 visores del cubo
     const visores = document.querySelectorAll(".visor-cubo");
@@ -45,7 +46,7 @@ window.addEventListener("DOMContentLoaded", () => {
 
     // --- LÓGICA DE CARGA: SE INYECTA A LOS 6 VISORES AL MISMO TIEMPO ---
     input.addEventListener("change", function () {
-        console.log("Cambio de archivo detectado");
+        //console.log("Cambio de archivo detectado");
         const archivo = this.files[0];
         if (!archivo) return;
         const extension = archivo.name.toLowerCase().split(".").pop();
@@ -58,6 +59,11 @@ window.addEventListener("DOMContentLoaded", () => {
         xSlider.value = 0;
         ySlider.value = 0;
         zSlider.value = 0;
+        // Restaurar selección de la paleta
+        botonesColor.forEach(b => b.classList.remove("activo"));
+        document
+            .querySelector('[data-color="original"]')
+            .classList.add("activo");
         
         aplicarPosicion();
 
@@ -111,7 +117,20 @@ window.addEventListener("DOMContentLoaded", () => {
     
     lightSlider.dispatchEvent(new Event("input"));
 
-
+    botonesColor.forEach((boton) => {
+    
+        boton.addEventListener("click", () => {
+    
+            // Marcar botón activo
+            botonesColor.forEach(b => b.classList.remove("activo"));
+            boton.classList.add("activo");
+    
+            // Cambiar color del modelo
+            ModelLoader.cambiarColor(boton.dataset.color);
+    
+        });
+    
+    });
 
     
 });
