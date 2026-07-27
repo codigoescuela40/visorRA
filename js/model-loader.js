@@ -28,6 +28,8 @@ window.ModelLoader = {
           let primera = true;
           
           modelo.traverse((obj) => {
+            console.log(obj.material.type);
+            console.log(obj.material.color);
             if (!obj.isMesh || !obj.geometry) return;
 
             obj.geometry.computeBoundingBox();
@@ -140,8 +142,14 @@ window.ModelLoader = {
 
     // ===== STL =====
     if (this.meshSTL) {
-      this.meshSTL.material.color.set(color);
-      this.meshSTL.material.needsUpdate = true;
+    
+        if (color === "original") {
+            this.meshSTL.material.color.set("#bdbdbd");
+        } else {
+            this.meshSTL.material.color.set(color);
+        }
+    
+        this.meshSTL.material.needsUpdate = true;
     }
 
     // ===== GLB =====
