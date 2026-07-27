@@ -1,4 +1,8 @@
 window.ModelLoader = {
+  //Modificación 27 ---
+  modeloGLB: null,
+  meshSTL: null,
+  //-------------------
   cargarGLB(url, visores, escalaInicial, onEscalaCalculada) {
     visores.forEach((visor, indice) => {
       visor.removeAttribute("gltf-model");
@@ -16,7 +20,10 @@ window.ModelLoader = {
           if (indice !== 0) return;
 
           const modelo = e.detail.model;
-
+          //Modificación 27 ---
+          this.modeloGLB = modelo;
+          //-------------------
+          
           let cajaGlobal = new THREE.Box3();
           let primera = true;
 
@@ -105,6 +112,12 @@ window.ModelLoader = {
         visor.removeObject3D("mesh");
 
         const mesh = new THREE.Mesh(geometry, material);
+
+        //Modificación 27 ---
+        this.meshSTL = mesh;
+        //-------------------
+
+        
         mesh.rotation.x = -Math.PI / 2;
 
         visor.setObject3D("mesh", mesh);
