@@ -74,3 +74,30 @@ html, body {
     flex:1;
     height:4px;
 }
+
+#paleta-colores{
+    display:flex;
+    gap:6px;
+    flex-wrap:wrap;
+}
+
+.color-btn{
+    width:22px;
+    height:22px;
+    border-radius:50%;
+    border:2px solid transparent;
+    cursor:pointer;
+    padding:0;
+    transition:.2s;
+}
+
+.color-btn:hover{
+    transform:scale(1.12);
+}
+
+.color-btn.activo{
+    border-color:#1976d2;
+    box-shadow:0 0 0 2px rgba(25,118,210,.2);
+}
+
+
