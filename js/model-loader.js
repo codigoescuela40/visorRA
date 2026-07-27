@@ -135,4 +135,46 @@ window.ModelLoader = {
       }
     });
   },
+
+  cambiarColor(color) {
+
+    // ===== STL =====
+    if (this.meshSTL) {
+      this.meshSTL.material.color.set(color);
+      this.meshSTL.material.needsUpdate = true;
+    }
+
+    // ===== GLB =====
+    if (this.modeloGLB) {
+
+      this.modeloGLB.traverse((obj) => {
+
+        if (!obj.isMesh) return;
+
+        // Guardamos el material original la primera vez
+        if (!obj.userData.materialOriginal) {
+          obj.userData.materialOriginal = obj.material;
+        }
+
+        // Restaurar colores originales
+        if (color === "original") {
+          obj.material = obj.userData.materialOriginal;
+          return;
+        }
+
+        // Creamos una copia del material una sola vez
+        if (!obj.userData.materialColor) {
+          obj.userData.materialColor = obj.material.clone();
+        }
+
+        obj.material = obj.userData.materialColor;
+        obj.material.color.set(color);
+        obj.material.needsUpdate = true;
+
+      });
+
+    }
+
+  }
+  
 };
