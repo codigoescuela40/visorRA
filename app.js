@@ -61,10 +61,7 @@ window.addEventListener("DOMContentLoaded", () => {
         zSlider.value = 0;
         // Restaurar selección de la paleta
         botonesColor.forEach(b => b.classList.remove("activo"));
-        document
-            .querySelector('[data-color="original"]')
-            .classList.add("activo");
-        
+       
         aplicarPosicion();
 
         
