@@ -169,9 +169,12 @@ window.ModelLoader = {
 
         if (!obj.isMesh) return;
         if (!obj.material) return;
-        console.log("Material:", obj.material);
-        console.log("vertexColors:", obj.material.vertexColors);
-        console.log("map:", obj.material.map);
+        
+        if (obj.geometry && obj.geometry.hasAttribute("color")) {
+            obj.geometry.deleteAttribute("color");
+        }
+        
+        obj.material.vertexColors = false;
         obj.material.color.set(color);
         obj.material.needsUpdate = true;
 
